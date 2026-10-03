@@ -51,12 +51,12 @@ try {
 }
 if (-not $mysqlOk) {
     if (-not (Get-Command mysql -ErrorAction SilentlyContinue)) {
-        throw "连不上 MySQL。请安装 MySQL 8，并用 root 执行：mysql -u root -p < scripts/init-mysql.sql"
+        throw 'Cannot connect to MySQL. Install MySQL 8 and run: mysql -u root -p < scripts/init-mysql.sql'
     }
     if ($env:MYSQL_ROOT_PASSWORD) {
         mysql -u root "-p$env:MYSQL_ROOT_PASSWORD" --default-character-set=utf8mb4 -e "source scripts/init-mysql.sql"
     } else {
-        throw "数据库 commerce_cs 还不存在。请执行：mysql -u root -p < scripts/init-mysql.sql"
+        throw 'Database commerce_cs is missing. Run: mysql -u root -p < scripts/init-mysql.sql'
     }
 }
 
@@ -76,7 +76,9 @@ if (-not (Test-Path $chromaDb)) {
 }
 $chromaUp = Get-NetTCPConnection -LocalPort 8000 -State Listen -ErrorAction SilentlyContinue
 if (-not $chromaUp) {
-    $chromaExe = (Get-Command chroma -ErrorAction SilentlyContinue)?.Source
+    $chromaCmd = Get-Command chroma -ErrorAction SilentlyContinue
+    $chromaExe = $null
+    if ($chromaCmd) { $chromaExe = $chromaCmd.Source }
     if (-not $chromaExe) {
         $pythonHome = Split-Path (Get-Command python).Source
         $candidate = Join-Path $pythonHome "Scripts\chroma.exe"

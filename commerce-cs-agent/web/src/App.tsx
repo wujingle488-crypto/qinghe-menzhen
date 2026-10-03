@@ -119,8 +119,8 @@ export function App() {
               onClick={() => setMenuOpen((value) => !value)}
             >
               <svg viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="12" cy="9" r="3.2" fill="none" stroke="currentColor" strokeWidth="1.7" />
-                <path d="M6 19.2c.8-3 2.8-4.5 6-4.5s5.2 1.5 6 4.5" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+                <circle cx="12" cy="9.2" r="3.35" fill="currentColor" />
+                <path d="M6.4 18.6c.7-2.4 2.6-3.6 5.6-3.6s4.9 1.2 5.6 3.6" fill="currentColor" />
               </svg>
             </button>
             {menuOpen ? (

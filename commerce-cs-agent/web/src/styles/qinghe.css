@@ -126,8 +126,8 @@
 }
 
 .qh-avatar svg {
-  width: 22px;
-  height: 22px;
+  width: 16px;
+  height: 16px;
 }
 
 .qh-stage {
@@ -2746,13 +2746,25 @@
 }
 
 .qh-nav nav button.qh-avatar {
+  display: grid;
+  place-items: center;
+  justify-content: center;
+  gap: 0;
   width: 38px;
+  min-width: 38px;
   min-height: 38px;
   padding: 0;
+  overflow: hidden;
   border: 1.5px solid rgba(255, 255, 255, 0.72);
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.16);
   color: white;
+}
+
+.qh-nav nav button.qh-avatar svg {
+  display: block;
+  width: 16px;
+  height: 16px;
 }
 
 .qh-user {
@@ -2790,94 +2802,372 @@
   position: relative;
   display: grid;
   min-height: 100dvh;
-  place-items: center;
   overflow: hidden;
   background:
-    radial-gradient(820px 320px at 8% 110%, rgba(35, 211, 195, 0.16), transparent 62%),
-    radial-gradient(640px 280px at 100% 18%, rgba(18, 184, 166, 0.12), transparent 58%),
-    #f7fcfd;
-  color: #163b5c;
+    radial-gradient(640px 280px at 86% 8%, rgba(18, 184, 166, 0.18), transparent 62%),
+    radial-gradient(520px 240px at 12% 88%, rgba(35, 211, 195, 0.14), transparent 60%),
+    #f6fcfd;
+  color: #123c5c;
   font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+.qh-login-glow,
+.qh-login-hospital,
+.qh-login-leaves,
+.qh-login-wave {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+}
+
+.qh-login-glow {
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 62%, rgba(207, 244, 239, 0.7) 0 90px, transparent 168px),
+    radial-gradient(circle at 28% 58%, rgba(18, 184, 166, 0.08) 0 120px, transparent 220px);
+}
+
+.qh-login-hospital {
+  left: 4%;
+  bottom: 18%;
+  width: min(420px, 34vw);
+  height: 38vh;
+  opacity: 0.28;
+  background:
+    linear-gradient(180deg, rgba(180, 224, 228, 0.18), transparent 70%),
+    repeating-linear-gradient(90deg, transparent 0 18px, rgba(120, 180, 190, 0.18) 18px 20px);
+  mask-image: linear-gradient(90deg, transparent, #000 18%, #000 70%, transparent),
+    linear-gradient(#000 52%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 18%, #000 70%, transparent),
+    linear-gradient(#000 52%, transparent 100%);
+}
+
+.qh-login-hospital::before,
+.qh-login-hospital::after {
+  content: "";
+  position: absolute;
+  bottom: 8%;
+  background: rgba(150, 200, 210, 0.35);
+  border-radius: 8px 8px 0 0;
+}
+
+.qh-login-hospital::before {
+  left: 12%;
+  width: 38%;
+  height: 58%;
+}
+
+.qh-login-hospital::after {
+  left: 46%;
+  width: 28%;
+  height: 72%;
+}
+
+.qh-login-leaves {
+  background: url("/brand/leaf_bg.png") center / contain no-repeat;
+  opacity: 0.55;
+  filter: blur(0.4px);
+}
+
+.qh-login-leaves-l {
+  left: -8%;
+  bottom: -12%;
+  width: min(520px, 42vw);
+  height: min(420px, 52vh);
+}
+
+.qh-login-leaves-r {
+  right: -10%;
+  top: 8%;
+  width: min(380px, 30vw);
+  height: min(340px, 42vh);
+  opacity: 0.42;
+}
+
+.qh-login-wave {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 110px;
+  z-index: 0;
+}
+
+.qh-login-script {
+  margin: 0;
+  color: #12b8a6;
+  font-family: "Ma Shan Zheng", "Noto Serif SC", cursive;
+  font-size: 22px;
+  letter-spacing: 0.04em;
+}
+
+.qh-login-script::after {
+  content: "";
+  display: block;
+  width: 168px;
+  height: 10px;
+  margin-top: 2px;
+  border-bottom: 1.5px solid rgba(18, 184, 166, 0.45);
+  border-radius: 50%;
+  transform: rotate(-8deg);
+}
+
+.qh-login-script-tr {
+  position: absolute;
+  top: 36px;
+  right: 48px;
+  z-index: 2;
+  transform: rotate(8deg);
+}
+
+.qh-login-heart {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-left: 6px;
+  vertical-align: 1px;
+  background: #12b8a6;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M12 21s-7.2-4.4-9.6-8.8C.4 8.6 2.2 5 6 5c2 0 3.4 1.1 4 2.2C10.6 6.1 12 5 14 5c3.8 0 5.6 3.6 3.6 7.2C19.2 16.6 12 21 12 21z'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M12 21s-7.2-4.4-9.6-8.8C.4 8.6 2.2 5 6 5c2 0 3.4 1.1 4 2.2C10.6 6.1 12 5 14 5c3.8 0 5.6 3.6 3.6 7.2C19.2 16.6 12 21 12 21z'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+}
+
+.qh-login-stage {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(24px, 1fr) minmax(0, 520px) 500px minmax(24px, 1fr);
+  column-gap: 36px;
+  align-items: center;
+  min-height: 100dvh;
+  padding: 56px 0 40px;
+}
+
+.qh-login-promo {
+  position: relative;
+  grid-column: 2;
+  display: grid;
+  align-content: center;
+  gap: 6px;
+  padding: 0;
+}
+
+.qh-login-brand {
+  color: #123c5c;
+}
+
+.qh-login-brand img {
+  width: 44px;
+  height: 44px;
+}
+
+.qh-login-brand strong {
+  font-size: 22px;
+  letter-spacing: 0.06em;
+}
+
+.qh-login-brand span {
+  color: #7895a7;
+  opacity: 1;
+  font-size: 12px;
+}
+
+.qh-login-title {
+  margin: 28px 0 6px;
+  color: #123c5c;
+  font-size: clamp(34px, 3vw, 44px);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.06em;
+}
+
+.qh-login-title-leaf {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  margin-left: 6px;
+  vertical-align: 4px;
+}
+
+.qh-login-motto {
+  margin: 0 0 8px;
+  color: #8aa3b3;
+  font-size: 18px;
+  letter-spacing: 0.28em;
+}
+
+.qh-login-hero {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(420px, 100%);
+  min-height: 320px;
+}
+
+.qh-login-orb {
+  position: absolute;
+  width: 72%;
+  height: 72%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(35, 211, 195, 0.22), rgba(234, 251, 250, 0.2) 62%, transparent 72%);
+}
+
+.qh-login-hero img {
+  position: relative;
+  z-index: 1;
+  width: min(380px, 100%);
+  max-width: none;
+}
+
+.qh-login-script-bl {
+  margin-top: -8px;
+  margin-left: 12px;
 }
 
 .qh-login-card {
   position: relative;
   z-index: 1;
+  grid-column: 3;
   display: grid;
-  gap: 12px;
-  width: min(420px, calc(100% - 32px));
-  padding: 28px 26px 24px;
-  border: 1px solid rgba(35, 211, 195, 0.16);
-  border-radius: 28px;
+  gap: 14px;
+  width: 100%;
+  max-width: 500px;
+  padding: 28px 30px 26px;
+  border: 1px solid #d7f3f1;
+  border-radius: 26px;
   background: #fff;
-  box-shadow: 0 8px 30px rgba(30, 120, 145, 0.08);
+  box-shadow: 0 18px 60px rgba(34, 130, 145, 0.1);
 }
 
-.qh-login-card .qh-brand strong {
-  color: #163b5c;
-}
-
-.qh-login-card .qh-brand span {
-  color: #7894a6;
-}
-
-.qh-login-card h1 {
-  margin: 8px 0 0;
-  font-size: 28px;
-}
-
-.qh-login-card p {
-  margin: 0;
-  color: #45677d;
+.qh-login-card h2 {
+  margin: 10px 0 2px;
+  color: #123c5c;
+  font-size: 32px;
+  font-weight: 700;
 }
 
 .qh-login-tabs {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  gap: 12px;
 }
 
-.qh-login-tabs button,
-.qh-login-submit {
-  min-height: 42px;
+.qh-login-tabs button {
+  min-height: 44px;
   border: 0;
-  border-radius: 999px;
-  background: #eafbfa;
-  color: #087c92;
+  border-radius: 22px;
+  background: #e7f8f6;
+  color: #5e8b97;
+  font: inherit;
+  font-weight: 600;
 }
 
-.qh-login-tabs button.on,
-.qh-login-submit {
-  background: linear-gradient(90deg, #087c92, #12b8a6);
+.qh-login-tabs button.on {
   color: #fff;
+  background: linear-gradient(90deg, #0e91a5, #13bda8);
+  box-shadow: 0 8px 16px rgba(14, 145, 165, 0.2);
 }
 
-.qh-login-card label {
+.qh-login-field {
   display: grid;
-  gap: 6px;
-  color: #163b5c;
+  gap: 7px;
+  color: #123c5c;
   font-size: 14px;
 }
 
+.qh-login-field > span:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.qh-login-ico {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  background: #12b8a6;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+}
+
+.qh-login-input {
+  position: relative;
+  display: block;
+}
+
 .qh-login-card input {
-  min-height: 46px;
-  padding: 0 12px;
-  border: 1px solid rgba(35, 211, 195, 0.28);
-  border-radius: 12px;
-  background: #f2fafb;
-  color: #163b5c;
+  width: 100%;
+  min-height: 50px;
+  padding: 0 42px 0 16px;
+  border: 1px solid #cdeff0;
+  border-radius: 13px;
+  background: #f5fbfc;
+  color: #123c5c;
   font: inherit;
   outline: none;
+}
+
+.qh-login-field > input {
+  padding-right: 16px;
 }
 
 .qh-login-card input:focus {
   border-color: #12b8a6;
   background: #fff;
-  box-shadow: 0 0 0 3px rgba(18, 184, 166, 0.08);
+  box-shadow: 0 0 0 3px rgba(18, 184, 166, 0.1);
+}
+
+.qh-login-eye {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  transform: translateY(-50%);
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #7aa0ae;
+}
+
+.qh-login-eye .qh-login-ico {
+  background: #7aa0ae;
 }
 
 .qh-login-error {
+  margin: 0;
   color: #d94848;
+  font-size: 13px;
+}
+
+.qh-login-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  border: 0;
+  border-radius: 15px;
+  color: #fff;
+  background: linear-gradient(90deg, #0e91a5, #13bda8);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  box-shadow: 0 10px 20px rgba(14, 145, 165, 0.18);
+}
+
+.qh-login-submit .qh-login-ico {
+  width: 18px;
+  height: 18px;
+  background: #fff;
 }
 
 .qh-login-submit:disabled {
@@ -2887,5 +3177,74 @@
 .qh-login-wait {
   position: relative;
   z-index: 1;
+  place-self: center;
   color: #087c92;
+}
+
+@media (max-width: 1439px) {
+  .qh-login-stage {
+    grid-template-columns: minmax(16px, 1fr) minmax(0, 460px) 460px minmax(16px, 1fr);
+    column-gap: 28px;
+  }
+
+  .qh-login-title {
+    margin-top: 20px;
+    font-size: 34px;
+  }
+
+  .qh-login-hero {
+    min-height: 280px;
+  }
+
+  .qh-login-hero img {
+    width: min(340px, 100%);
+  }
+}
+
+@media (max-width: 899px) {
+  .qh-login {
+    overflow: auto;
+  }
+
+  .qh-login-stage {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    align-content: start;
+    gap: 8px;
+    padding: 72px 20px 40px;
+  }
+
+  .qh-login-promo,
+  .qh-login-card {
+    grid-column: auto;
+    width: min(500px, 100%);
+  }
+
+  .qh-login-promo {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .qh-login-title {
+    margin-top: 16px;
+    letter-spacing: 0.04em;
+  }
+
+  .qh-login-hero {
+    min-height: 220px;
+  }
+
+  .qh-login-hero img {
+    width: min(280px, 100%);
+  }
+
+  .qh-login-script-tr {
+    right: 24px;
+    font-size: 16px;
+  }
+
+  .qh-login-hospital,
+  .qh-login-leaves-l {
+    opacity: 0.2;
+  }
 }

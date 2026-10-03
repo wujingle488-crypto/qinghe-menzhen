@@ -18,5 +18,7 @@
 
 ~$*
 *.tmp
+*.log
 .DS_Store
 Thumbs.db
+**/wc-java-lint-report.json

@@ -1,0 +1,9 @@
+Create an original premium AI medical assistant robot mascot for the Qinghe MenZhen healthcare SaaS UI.
+
+Style: flat vector illustration, soft friendly premium healthcare technology, rounded geometry, calm and trustworthy.
+Robot: rounded head, dark navy digital face, cyan/teal body, white doctor coat, small stethoscope, holding a medical card, subtle medical cross.
+Expression: warm, reassuring, professional, not childish.
+Decor: a few translucent botanical leaves, tiny hearts and medical symbols.
+Palette: #087C92 #12B8A6 #23D3C3 #DFF9F6 #FFFFFF #163B5C.
+Transparent background, centered full-body composition, clean silhouette, no text, no watermark, no photorealism, no 3D render.
+Output: 1024x1024 PNG with transparent background.

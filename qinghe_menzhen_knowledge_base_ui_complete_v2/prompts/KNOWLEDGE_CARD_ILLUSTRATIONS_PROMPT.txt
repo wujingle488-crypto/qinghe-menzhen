@@ -1,0 +1,6 @@
+生成一组“青禾门诊”医疗知识库内容卡片配图。
+主题包含：常见疾病、药物、血液检查、健康科普、急救、中医调理。
+风格统一为 premium flat medical vector illustration、soft teal、white background、mint green accents。
+不要真实患者照片，不要人物面部特写，不要文字，不要水印。
+颜色：#087C92 #12B8A6 #23D3C3 #EAFBFA #FFFFFF。
+每个主题简洁、干净、适合 16:9 卡片顶部图片区域。

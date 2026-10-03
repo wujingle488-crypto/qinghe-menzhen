@@ -1,0 +1,1753 @@
+{
+  "summary": {
+    "mode": "http",
+    "intents": 14,
+    "queries": 42,
+    "macro_hit1": 0.5952,
+    "macro_hit3": 0.881,
+    "macro_accept3": 0.9286,
+    "micro_hit1": 0.5952,
+    "micro_hit3": 0.881,
+    "micro_accept3": 0.9286,
+    "intent_coverage": 1.0,
+    "accept_intent_coverage": 1.0
+  },
+  "intents": [
+    {
+      "id": "flu-systemic",
+      "intent": "流感样全身症状",
+      "primary": "03",
+      "acceptable": [
+        "01",
+        "02",
+        "03"
+      ],
+      "n": 3,
+      "hit1": 0.0,
+      "hit3": 0.6667,
+      "accept3": 1.0,
+      "covered": true,
+      "accept_covered": true
+    },
+    {
+      "id": "cold-mild",
+      "intent": "普通感冒样上呼吸道不适",
+      "primary": "01",
+      "acceptable": [
+        "01",
+        "02"
+      ],
+      "n": 3,
+      "hit1": 0.0,
+      "hit3": 0.6667,
+      "accept3": 0.6667,
+      "covered": true,
+      "accept_covered": true
+    },
+    {
+      "id": "flu-vs-cold",
+      "intent": "区分流感和普通感冒",
+      "primary": "01",
+      "acceptable": [
+        "01",
+        "02",
+        "03"
+      ],
+      "n": 3,
+      "hit1": 0.3333,
+      "hit3": 1.0,
+      "accept3": 1.0,
+      "covered": true,
+      "accept_covered": true
+    },
+    {
+      "id": "spring-virus",
+      "intent": "换季呼吸道病毒感染",
+      "primary": "02",
+      "acceptable": [
+        "01",
+        "02",
+        "12"
+      ],
+      "n": 3,
+      "hit1": 0.3333,
+      "hit3": 0.6667,
+      "accept3": 1.0,
+      "covered": true,
+      "accept_covered": true
+    },
+    {
+      "id": "norovirus",
+      "intent": "集体呕吐腹泻",
+      "primary": "04",
+      "acceptable": [
+        "04"
+      ],
+      "n": 3,
+      "hit1": 0.6667,
+      "hit3": 1.0,
+      "accept3": 1.0,
+      "covered": true,
+      "accept_covered": true
+    },
+    {
+      "id": "food-poison",
+      "intent": "饭后急性胃肠不适",
+      "primary": "11",
+      "acceptable": [
+        "11",
+        "04"
+      ],
+      "n": 3,
+      "hit1": 0.3333,
+      "hit3": 1.0,
+      "accept3": 1.0,
+      "covered": true,
+      "accept_covered": true
+    },
+    {
+      "id": "migraine",
+      "intent": "一侧搏动性头痛伴畏光恶心",
+      "primary": "05",
+      "acceptable": [
+        "05"
+      ],
+      "n": 3,
+      "hit1": 0.3333,
+      "hit3": 0.3333,
+      "accept3": 0.3333,
+      "covered": true,
+      "accept_covered": true
+    },
+    {
+      "id": "chest-pain",
+      "intent": "突发胸痛伴冷汗",
+      "primary": "06",
+      "acceptable": [
+        "06"
+      ],
+      "n": 3,
+      "hit1": 0.6667,
+      "hit3": 1.0,
+      "accept3": 1.0,
+      "covered": true,
+      "accept_covered": true
+    },
+    {
+      "id": "urticaria",
+      "intent": "突发瘙痒性风团样皮疹",
+      "primary": "07",
+      "acceptable": [
+        "07"
+      ],
+      "n": 3,
+      "hit1": 1.0,
+      "hit3": 1.0,
+      "accept3": 1.0,
+      "covered": true,
+      "accept_covered": true
+    },
+    {
+      "id": "rhinitis",
+      "intent": "季节性喷嚏清涕且不发烧",
+      "primary": "08",
+      "acceptable": [
+        "08"
+      ],
+      "n": 3,
+      "hit1": 1.0,
+      "hit3": 1.0,
+      "accept3": 1.0,
+      "covered": true,
+      "accept_covered": true
+    },
+    {
+      "id": "hfmd",
+      "intent": "儿童手口腔疱疹伴发热",
+      "primary": "09",
+      "acceptable": [
+        "09"
+      ],
+      "n": 3,
+      "hit1": 1.0,
+      "hit3": 1.0,
+      "accept3": 1.0,
+      "covered": true,
+      "accept_covered": true
+    },
+    {
+      "id": "hfmd-severe",
+      "intent": "疱疹后精神差、手脚凉",
+      "primary": "09",
+      "acceptable": [
+        "09",
+        "06"
+      ],
+      "n": 3,
+      "hit1": 0.6667,
+      "hit3": 1.0,
+      "accept3": 1.0,
+      "covered": true,
+      "accept_covered": true
+    },
+    {
+      "id": "pinkeye",
+      "intent": "传染性眼红流泪",
+      "primary": "10",
+      "acceptable": [
+        "10"
+      ],
+      "n": 3,
+      "hit1": 1.0,
+      "hit3": 1.0,
+      "accept3": 1.0,
+      "covered": true,
+      "accept_covered": true
+    },
+    {
+      "id": "infant-cough",
+      "intent": "婴幼儿轻咳不发烧",
+      "primary": "12",
+      "acceptable": [
+        "12",
+        "02"
+      ],
+      "n": 3,
+      "hit1": 1.0,
+      "hit3": 1.0,
+      "accept3": 1.0,
+      "covered": true,
+      "accept_covered": true
+    }
+  ],
+  "rows": [
+    {
+      "id": "flu-systemic",
+      "intent": "流感样全身症状",
+      "primary": "03",
+      "acceptable": [
+        "01",
+        "02",
+        "03"
+      ],
+      "variant": 1,
+      "query": "高烧到三十九度，浑身酸痛，特别没力气",
+      "hits": [
+        {
+          "file": "02",
+          "name": "02-春季呼吸道病毒感染.md",
+          "title": "春夏之交的呼吸道病毒感染",
+          "parent_id": "02-春季呼吸道病毒感染-p1",
+          "distance": 0.414
+        },
+        {
+          "file": "03",
+          "name": "03-流感一般有什么症状.md",
+          "title": "得了流感一般有什么症状",
+          "parent_id": "03-流感一般有什么症状-p0",
+          "distance": 0.442
+        },
+        {
+          "file": "06",
+          "name": "06-心血管疾病与胸痛警示.md",
+          "title": "心血管疾病",
+          "parent_id": "06-心血管疾病与胸痛警示-p2",
+          "distance": 0.445
+        }
+      ],
+      "hit1": false,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "flu-systemic",
+      "intent": "流感样全身症状",
+      "primary": "03",
+      "acceptable": [
+        "01",
+        "02",
+        "03"
+      ],
+      "variant": 2,
+      "query": "烧得很厉害，骨头缝都疼，一点劲都没有",
+      "hits": [
+        {
+          "file": "05",
+          "name": "05-头痛疾患.md",
+          "title": "头痛疾患",
+          "parent_id": "05-头痛疾患-p3",
+          "distance": 0.503
+        },
+        {
+          "file": "02",
+          "name": "02-春季呼吸道病毒感染.md",
+          "title": "春夏之交的呼吸道病毒感染",
+          "parent_id": "02-春季呼吸道病毒感染-p1",
+          "distance": 0.512
+        },
+        {
+          "file": "05",
+          "name": "05-头痛疾患.md",
+          "title": "头痛疾患",
+          "parent_id": "05-头痛疾患-p2",
+          "distance": 0.53
+        }
+      ],
+      "hit1": false,
+      "hit3": false,
+      "accept3": true
+    },
+    {
+      "id": "flu-systemic",
+      "intent": "流感样全身症状",
+      "primary": "03",
+      "acceptable": [
+        "01",
+        "02",
+        "03"
+      ],
+      "variant": 3,
+      "query": "体温上去了，全身又酸又软，起不来床",
+      "hits": [
+        {
+          "file": "02",
+          "name": "02-春季呼吸道病毒感染.md",
+          "title": "春夏之交的呼吸道病毒感染",
+          "parent_id": "02-春季呼吸道病毒感染-p1",
+          "distance": 0.468
+        },
+        {
+          "file": "03",
+          "name": "03-流感一般有什么症状.md",
+          "title": "得了流感一般有什么症状",
+          "parent_id": "03-流感一般有什么症状-p0",
+          "distance": 0.484
+        },
+        {
+          "file": "07",
+          "name": "07-荨麻疹.md",
+          "title": "疙瘩来无影去无踪，还伴有瘙痒，会是怎么回事？",
+          "parent_id": "07-荨麻疹-p2",
+          "distance": 0.487
+        }
+      ],
+      "hit1": false,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "cold-mild",
+      "intent": "普通感冒样上呼吸道不适",
+      "primary": "01",
+      "acceptable": [
+        "01",
+        "02"
+      ],
+      "variant": 1,
+      "query": "嗓子疼，流鼻涕，鼻塞，人倒还行",
+      "hits": [
+        {
+          "file": "02",
+          "name": "02-春季呼吸道病毒感染.md",
+          "title": "春夏之交的呼吸道病毒感染",
+          "parent_id": "02-春季呼吸道病毒感染-p0",
+          "distance": 0.379
+        },
+        {
+          "file": "08",
+          "name": "08-过敏性鼻炎还是感冒.md",
+          "title": "过敏性鼻炎还是感冒？主要看这几点！",
+          "parent_id": "08-过敏性鼻炎还是感冒-p1",
+          "distance": 0.382
+        },
+        {
+          "file": "01",
+          "name": "01-流感与普通感冒的区别.md",
+          "title": "流感和普通感冒有什么区别",
+          "parent_id": "01-流感与普通感冒的区别-p0",
+          "distance": 0.408
+        }
+      ],
+      "hit1": false,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "cold-mild",
+      "intent": "普通感冒样上呼吸道不适",
+      "primary": "01",
+      "acceptable": [
+        "01",
+        "02"
+      ],
+      "variant": 2,
+      "query": "喉咙不舒服，鼻子堵着，有鼻涕，没有浑身难受",
+      "hits": [
+        {
+          "file": "08",
+          "name": "08-过敏性鼻炎还是感冒.md",
+          "title": "过敏性鼻炎还是感冒？主要看这几点！",
+          "parent_id": "08-过敏性鼻炎还是感冒-p2",
+          "distance": 0.39
+        },
+        {
+          "file": "08",
+          "name": "08-过敏性鼻炎还是感冒.md",
+          "title": "过敏性鼻炎还是感冒？主要看这几点！",
+          "parent_id": "08-过敏性鼻炎还是感冒-p1",
+          "distance": 0.392
+        },
+        {
+          "file": "08",
+          "name": "08-过敏性鼻炎还是感冒.md",
+          "title": "过敏性鼻炎还是感冒？主要看这几点！",
+          "parent_id": "08-过敏性鼻炎还是感冒-p0",
+          "distance": 0.402
+        }
+      ],
+      "hit1": false,
+      "hit3": false,
+      "accept3": false
+    },
+    {
+      "id": "cold-mild",
+      "intent": "普通感冒样上呼吸道不适",
+      "primary": "01",
+      "acceptable": [
+        "01",
+        "02"
+      ],
+      "variant": 3,
+      "query": "就觉得咽部疼、鼻子不通，精神还好",
+      "hits": [
+        {
+          "file": "08",
+          "name": "08-过敏性鼻炎还是感冒.md",
+          "title": "过敏性鼻炎还是感冒？主要看这几点！",
+          "parent_id": "08-过敏性鼻炎还是感冒-p1",
+          "distance": 0.42
+        },
+        {
+          "file": "02",
+          "name": "02-春季呼吸道病毒感染.md",
+          "title": "春夏之交的呼吸道病毒感染",
+          "parent_id": "02-春季呼吸道病毒感染-p0",
+          "distance": 0.428
+        },
+        {
+          "file": "01",
+          "name": "01-流感与普通感冒的区别.md",
+          "title": "流感和普通感冒有什么区别",
+          "parent_id": "01-流感与普通感冒的区别-p0",
+          "distance": 0.43
+        }
+      ],
+      "hit1": false,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "flu-vs-cold",
+      "intent": "区分流感和普通感冒",
+      "primary": "01",
+      "acceptable": [
+        "01",
+        "02",
+        "03"
+      ],
+      "variant": 1,
+      "query": "怎么判断是流感还是只是着凉了",
+      "hits": [
+        {
+          "file": "03",
+          "name": "03-流感一般有什么症状.md",
+          "title": "得了流感一般有什么症状",
+          "parent_id": "03-流感一般有什么症状-p0",
+          "distance": 0.281
+        },
+        {
+          "file": "01",
+          "name": "01-流感与普通感冒的区别.md",
+          "title": "流感和普通感冒有什么区别",
+          "parent_id": "01-流感与普通感冒的区别-p0",
+          "distance": 0.407
+        },
+        {
+          "file": "02",
+          "name": "02-春季呼吸道病毒感染.md",
+          "title": "春夏之交的呼吸道病毒感染",
+          "parent_id": "02-春季呼吸道病毒感染-p0",
+          "distance": 0.439
+        }
+      ],
+      "hit1": false,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "flu-vs-cold",
+      "intent": "区分流感和普通感冒",
+      "primary": "01",
+      "acceptable": [
+        "01",
+        "02",
+        "03"
+      ],
+      "variant": 2,
+      "query": "家里人说我这是流感，可我分不清和感冒有啥不一样",
+      "hits": [
+        {
+          "file": "01",
+          "name": "01-流感与普通感冒的区别.md",
+          "title": "流感和普通感冒有什么区别",
+          "parent_id": "01-流感与普通感冒的区别-p0",
+          "distance": 0.263
+        },
+        {
+          "file": "03",
+          "name": "03-流感一般有什么症状.md",
+          "title": "得了流感一般有什么症状",
+          "parent_id": "03-流感一般有什么症状-p0",
+          "distance": 0.29
+        },
+        {
+          "file": "02",
+          "name": "02-春季呼吸道病毒感染.md",
+          "title": "春夏之交的呼吸道病毒感染",
+          "parent_id": "02-春季呼吸道病毒感染-p1",
+          "distance": 0.359
+        }
+      ],
+      "hit1": true,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "flu-vs-cold",
+      "intent": "区分流感和普通感冒",
+      "primary": "01",
+      "acceptable": [
+        "01",
+        "02",
+        "03"
+      ],
+      "variant": 3,
+      "query": "想知道重感冒和流感在表现上差在哪",
+      "hits": [
+        {
+          "file": "03",
+          "name": "03-流感一般有什么症状.md",
+          "title": "得了流感一般有什么症状",
+          "parent_id": "03-流感一般有什么症状-p0",
+          "distance": 0.267
+        },
+        {
+          "file": "01",
+          "name": "01-流感与普通感冒的区别.md",
+          "title": "流感和普通感冒有什么区别",
+          "parent_id": "01-流感与普通感冒的区别-p0",
+          "distance": 0.302
+        },
+        {
+          "file": "08",
+          "name": "08-过敏性鼻炎还是感冒.md",
+          "title": "过敏性鼻炎还是感冒？主要看这几点！",
+          "parent_id": "08-过敏性鼻炎还是感冒-p1",
+          "distance": 0.345
+        }
+      ],
+      "hit1": false,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "spring-virus",
+      "intent": "换季呼吸道病毒感染",
+      "primary": "02",
+      "acceptable": [
+        "01",
+        "02",
+        "12"
+      ],
+      "variant": 1,
+      "query": "开春以后孩子老咳嗽，不知道是哪种呼吸道的问题",
+      "hits": [
+        {
+          "file": "12",
+          "name": "12-婴幼儿咳嗽.md",
+          "title": "婴幼儿咳嗽家长应该如何面对呢？",
+          "parent_id": "12-婴幼儿咳嗽-p0",
+          "distance": 0.281
+        },
+        {
+          "file": "12",
+          "name": "12-婴幼儿咳嗽.md",
+          "title": "婴幼儿咳嗽家长应该如何面对呢？",
+          "parent_id": "12-婴幼儿咳嗽-p1",
+          "distance": 0.292
+        },
+        {
+          "file": "02",
+          "name": "02-春季呼吸道病毒感染.md",
+          "title": "春夏之交的呼吸道病毒感染",
+          "parent_id": "02-春季呼吸道病毒感染-p0",
+          "distance": 0.319
+        }
+      ],
+      "hit1": false,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "spring-virus",
+      "intent": "换季呼吸道病毒感染",
+      "primary": "02",
+      "acceptable": [
+        "01",
+        "02",
+        "12"
+      ],
+      "variant": 2,
+      "query": "天气刚暖，小朋友反复咳，是不是换季容易中招",
+      "hits": [
+        {
+          "file": "12",
+          "name": "12-婴幼儿咳嗽.md",
+          "title": "婴幼儿咳嗽家长应该如何面对呢？",
+          "parent_id": "12-婴幼儿咳嗽-p0",
+          "distance": 0.337
+        },
+        {
+          "file": "12",
+          "name": "12-婴幼儿咳嗽.md",
+          "title": "婴幼儿咳嗽家长应该如何面对呢？",
+          "parent_id": "12-婴幼儿咳嗽-p1",
+          "distance": 0.369
+        }
+      ],
+      "hit1": false,
+      "hit3": false,
+      "accept3": true
+    },
+    {
+      "id": "spring-virus",
+      "intent": "换季呼吸道病毒感染",
+      "primary": "02",
+      "acceptable": [
+        "01",
+        "02",
+        "12"
+      ],
+      "variant": 3,
+      "query": "春天大人小孩轮流嗓子不舒服，会不会好几种病毒一起流行",
+      "hits": [
+        {
+          "file": "02",
+          "name": "02-春季呼吸道病毒感染.md",
+          "title": "春夏之交的呼吸道病毒感染",
+          "parent_id": "02-春季呼吸道病毒感染-p0",
+          "distance": 0.351
+        },
+        {
+          "file": "01",
+          "name": "01-流感与普通感冒的区别.md",
+          "title": "流感和普通感冒有什么区别",
+          "parent_id": "01-流感与普通感冒的区别-p0",
+          "distance": 0.357
+        },
+        {
+          "file": "12",
+          "name": "12-婴幼儿咳嗽.md",
+          "title": "婴幼儿咳嗽家长应该如何面对呢？",
+          "parent_id": "12-婴幼儿咳嗽-p0",
+          "distance": 0.412
+        }
+      ],
+      "hit1": true,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "norovirus",
+      "intent": "集体呕吐腹泻",
+      "primary": "04",
+      "acceptable": [
+        "04"
+      ],
+      "variant": 1,
+      "query": "幼儿园好几个孩子一起吐，拉得很稀",
+      "hits": [
+        {
+          "file": "12",
+          "name": "12-婴幼儿咳嗽.md",
+          "title": "婴幼儿咳嗽家长应该如何面对呢？",
+          "parent_id": "12-婴幼儿咳嗽-p1",
+          "distance": 0.415
+        },
+        {
+          "file": "04",
+          "name": "04-诺如病毒引起的急性胃肠炎.md",
+          "title": "洪涝灾害后如何预防诺如病毒等引起的病毒性胃肠炎",
+          "parent_id": "04-诺如病毒引起的急性胃肠炎-p0",
+          "distance": 0.423
+        },
+        {
+          "file": "04",
+          "name": "04-诺如病毒引起的急性胃肠炎.md",
+          "title": "洪涝灾害后如何预防诺如病毒等引起的病毒性胃肠炎",
+          "parent_id": "04-诺如病毒引起的急性胃肠炎-p1",
+          "distance": 0.48
+        }
+      ],
+      "hit1": false,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "norovirus",
+      "intent": "集体呕吐腹泻",
+      "primary": "04",
+      "acceptable": [
+        "04"
+      ],
+      "variant": 2,
+      "query": "班里一下子好几个人上吐下泻",
+      "hits": [
+        {
+          "file": "04",
+          "name": "04-诺如病毒引起的急性胃肠炎.md",
+          "title": "洪涝灾害后如何预防诺如病毒等引起的病毒性胃肠炎",
+          "parent_id": "04-诺如病毒引起的急性胃肠炎-p0",
+          "distance": 0.471
+        },
+        {
+          "file": "04",
+          "name": "04-诺如病毒引起的急性胃肠炎.md",
+          "title": "洪涝灾害后如何预防诺如病毒等引起的病毒性胃肠炎",
+          "parent_id": "04-诺如病毒引起的急性胃肠炎-p1",
+          "distance": 0.506
+        },
+        {
+          "file": "03",
+          "name": "03-流感一般有什么症状.md",
+          "title": "得了流感一般有什么症状",
+          "parent_id": "03-流感一般有什么症状-p0",
+          "distance": 0.539
+        }
+      ],
+      "hit1": true,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "norovirus",
+      "intent": "集体呕吐腹泻",
+      "primary": "04",
+      "acceptable": [
+        "04"
+      ],
+      "variant": 3,
+      "query": "托班小朋友集体闹肚子，吐得厉害",
+      "hits": [
+        {
+          "file": "04",
+          "name": "04-诺如病毒引起的急性胃肠炎.md",
+          "title": "洪涝灾害后如何预防诺如病毒等引起的病毒性胃肠炎",
+          "parent_id": "04-诺如病毒引起的急性胃肠炎-p0",
+          "distance": 0.497
+        },
+        {
+          "file": "12",
+          "name": "12-婴幼儿咳嗽.md",
+          "title": "婴幼儿咳嗽家长应该如何面对呢？",
+          "parent_id": "12-婴幼儿咳嗽-p1",
+          "distance": 0.518
+        },
+        {
+          "file": "04",
+          "name": "04-诺如病毒引起的急性胃肠炎.md",
+          "title": "洪涝灾害后如何预防诺如病毒等引起的病毒性胃肠炎",
+          "parent_id": "04-诺如病毒引起的急性胃肠炎-p1",
+          "distance": 0.542
+        }
+      ],
+      "hit1": true,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "food-poison",
+      "intent": "饭后急性胃肠不适",
+      "primary": "11",
+      "acceptable": [
+        "11",
+        "04"
+      ],
+      "variant": 1,
+      "query": "吃了隔夜菜，过了两个小时开始吐，一起吃饭的人也拉肚子",
+      "hits": [
+        {
+          "file": "04",
+          "name": "04-诺如病毒引起的急性胃肠炎.md",
+          "title": "洪涝灾害后如何预防诺如病毒等引起的病毒性胃肠炎",
+          "parent_id": "04-诺如病毒引起的急性胃肠炎-p0",
+          "distance": 0.468
+        },
+        {
+          "file": "11",
+          "name": "11-食物中毒.md",
+          "title": "春节饮食安全指南",
+          "parent_id": "11-食物中毒-p0",
+          "distance": 0.488
+        },
+        {
+          "file": "04",
+          "name": "04-诺如病毒引起的急性胃肠炎.md",
+          "title": "洪涝灾害后如何预防诺如病毒等引起的病毒性胃肠炎",
+          "parent_id": "04-诺如病毒引起的急性胃肠炎-p1",
+          "distance": 0.498
+        }
+      ],
+      "hit1": false,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "food-poison",
+      "intent": "饭后急性胃肠不适",
+      "primary": "11",
+      "acceptable": [
+        "11",
+        "04"
+      ],
+      "variant": 2,
+      "query": "晚饭后不久就恶心吐了，同桌的人也肚子不舒服",
+      "hits": [
+        {
+          "file": "04",
+          "name": "04-诺如病毒引起的急性胃肠炎.md",
+          "title": "洪涝灾害后如何预防诺如病毒等引起的病毒性胃肠炎",
+          "parent_id": "04-诺如病毒引起的急性胃肠炎-p0",
+          "distance": 0.46
+        },
+        {
+          "file": "11",
+          "name": "11-食物中毒.md",
+          "title": "春节饮食安全指南",
+          "parent_id": "11-食物中毒-p0",
+          "distance": 0.482
+        },
+        {
+          "file": "04",
+          "name": "04-诺如病毒引起的急性胃肠炎.md",
+          "title": "洪涝灾害后如何预防诺如病毒等引起的病毒性胃肠炎",
+          "parent_id": "04-诺如病毒引起的急性胃肠炎-p1",
+          "distance": 0.502
+        }
+      ],
+      "hit1": false,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "food-poison",
+      "intent": "饭后急性胃肠不适",
+      "primary": "11",
+      "acceptable": [
+        "11",
+        "04"
+      ],
+      "variant": 3,
+      "query": "剩饭热了一下还是吃坏了，腹痛还拉肚子",
+      "hits": [
+        {
+          "file": "11",
+          "name": "11-食物中毒.md",
+          "title": "春节饮食安全指南",
+          "parent_id": "11-食物中毒-p0",
+          "distance": 0.315
+        },
+        {
+          "file": "04",
+          "name": "04-诺如病毒引起的急性胃肠炎.md",
+          "title": "洪涝灾害后如何预防诺如病毒等引起的病毒性胃肠炎",
+          "parent_id": "04-诺如病毒引起的急性胃肠炎-p0",
+          "distance": 0.458
+        },
+        {
+          "file": "04",
+          "name": "04-诺如病毒引起的急性胃肠炎.md",
+          "title": "洪涝灾害后如何预防诺如病毒等引起的病毒性胃肠炎",
+          "parent_id": "04-诺如病毒引起的急性胃肠炎-p1",
+          "distance": 0.466
+        }
+      ],
+      "hit1": true,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "migraine",
+      "intent": "一侧搏动性头痛伴畏光恶心",
+      "primary": "05",
+      "acceptable": [
+        "05"
+      ],
+      "variant": 1,
+      "query": "一边太阳穴一跳一跳地疼，见光就难受，还想吐",
+      "hits": [
+        {
+          "file": "04",
+          "name": "04-诺如病毒引起的急性胃肠炎.md",
+          "title": "洪涝灾害后如何预防诺如病毒等引起的病毒性胃肠炎",
+          "parent_id": "04-诺如病毒引起的急性胃肠炎-p1",
+          "distance": 0.498
+        },
+        {
+          "file": "07",
+          "name": "07-荨麻疹.md",
+          "title": "疙瘩来无影去无踪，还伴有瘙痒，会是怎么回事？",
+          "parent_id": "07-荨麻疹-p3",
+          "distance": 0.524
+        },
+        {
+          "file": "06",
+          "name": "06-心血管疾病与胸痛警示.md",
+          "title": "心血管疾病",
+          "parent_id": "06-心血管疾病与胸痛警示-p1",
+          "distance": 0.524
+        }
+      ],
+      "hit1": false,
+      "hit3": false,
+      "accept3": false
+    },
+    {
+      "id": "migraine",
+      "intent": "一侧搏动性头痛伴畏光恶心",
+      "primary": "05",
+      "acceptable": [
+        "05"
+      ],
+      "variant": 2,
+      "query": "半边头痛得厉害，吵和亮都受不了，胃里翻",
+      "hits": [
+        {
+          "file": "05",
+          "name": "05-头痛疾患.md",
+          "title": "头痛疾患",
+          "parent_id": "05-头痛疾患-p3",
+          "distance": 0.458
+        },
+        {
+          "file": "05",
+          "name": "05-头痛疾患.md",
+          "title": "头痛疾患",
+          "parent_id": "05-头痛疾患-p2",
+          "distance": 0.463
+        },
+        {
+          "file": "05",
+          "name": "05-头痛疾患.md",
+          "title": "头痛疾患",
+          "parent_id": "05-头痛疾患-p0",
+          "distance": 0.479
+        }
+      ],
+      "hit1": true,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "migraine",
+      "intent": "一侧搏动性头痛伴畏光恶心",
+      "primary": "05",
+      "acceptable": [
+        "05"
+      ],
+      "variant": 3,
+      "query": "眼睛后面抽着疼，活动一下更重，还恶心",
+      "hits": [
+        {
+          "file": "04",
+          "name": "04-诺如病毒引起的急性胃肠炎.md",
+          "title": "洪涝灾害后如何预防诺如病毒等引起的病毒性胃肠炎",
+          "parent_id": "04-诺如病毒引起的急性胃肠炎-p1",
+          "distance": 0.436
+        },
+        {
+          "file": "10",
+          "name": "10-急性出血性结膜炎.md",
+          "title": "急性出血性结膜炎（红眼病）",
+          "parent_id": "10-急性出血性结膜炎-p0",
+          "distance": 0.482
+        },
+        {
+          "file": "07",
+          "name": "07-荨麻疹.md",
+          "title": "疙瘩来无影去无踪，还伴有瘙痒，会是怎么回事？",
+          "parent_id": "07-荨麻疹-p3",
+          "distance": 0.485
+        }
+      ],
+      "hit1": false,
+      "hit3": false,
+      "accept3": false
+    },
+    {
+      "id": "chest-pain",
+      "intent": "突发胸痛伴冷汗",
+      "primary": "06",
+      "acceptable": [
+        "06"
+      ],
+      "variant": 1,
+      "query": "突然胸口闷着疼，直冒冷汗",
+      "hits": [
+        {
+          "file": "06",
+          "name": "06-心血管疾病与胸痛警示.md",
+          "title": "心血管疾病",
+          "parent_id": "06-心血管疾病与胸痛警示-p2",
+          "distance": 0.448
+        },
+        {
+          "file": "06",
+          "name": "06-心血管疾病与胸痛警示.md",
+          "title": "心血管疾病",
+          "parent_id": "06-心血管疾病与胸痛警示-p1",
+          "distance": 0.451
+        },
+        {
+          "file": "02",
+          "name": "02-春季呼吸道病毒感染.md",
+          "title": "春夏之交的呼吸道病毒感染",
+          "parent_id": "02-春季呼吸道病毒感染-p1",
+          "distance": 0.453
+        }
+      ],
+      "hit1": true,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "chest-pain",
+      "intent": "突发胸痛伴冷汗",
+      "primary": "06",
+      "acceptable": [
+        "06"
+      ],
+      "variant": 2,
+      "query": "心口一阵疼，汗一下子出来了，脸色发白",
+      "hits": [
+        {
+          "file": "06",
+          "name": "06-心血管疾病与胸痛警示.md",
+          "title": "心血管疾病",
+          "parent_id": "06-心血管疾病与胸痛警示-p1",
+          "distance": 0.449
+        },
+        {
+          "file": "06",
+          "name": "06-心血管疾病与胸痛警示.md",
+          "title": "心血管疾病",
+          "parent_id": "06-心血管疾病与胸痛警示-p2",
+          "distance": 0.457
+        },
+        {
+          "file": "04",
+          "name": "04-诺如病毒引起的急性胃肠炎.md",
+          "title": "洪涝灾害后如何预防诺如病毒等引起的病毒性胃肠炎",
+          "parent_id": "04-诺如病毒引起的急性胃肠炎-p1",
+          "distance": 0.467
+        }
+      ],
+      "hit1": true,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "chest-pain",
+      "intent": "突发胸痛伴冷汗",
+      "primary": "06",
+      "acceptable": [
+        "06"
+      ],
+      "variant": 3,
+      "query": "左边胸口不舒服，还喘不上气",
+      "hits": [
+        {
+          "file": "12",
+          "name": "12-婴幼儿咳嗽.md",
+          "title": "婴幼儿咳嗽家长应该如何面对呢？",
+          "parent_id": "12-婴幼儿咳嗽-p1",
+          "distance": 0.474
+        },
+        {
+          "file": "07",
+          "name": "07-荨麻疹.md",
+          "title": "疙瘩来无影去无踪，还伴有瘙痒，会是怎么回事？",
+          "parent_id": "07-荨麻疹-p3",
+          "distance": 0.499
+        },
+        {
+          "file": "06",
+          "name": "06-心血管疾病与胸痛警示.md",
+          "title": "心血管疾病",
+          "parent_id": "06-心血管疾病与胸痛警示-p1",
+          "distance": 0.503
+        }
+      ],
+      "hit1": false,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "urticaria",
+      "intent": "突发瘙痒性风团样皮疹",
+      "primary": "07",
+      "acceptable": [
+        "07"
+      ],
+      "variant": 1,
+      "query": "身上突然起了一片很痒的包，过几小时又消了",
+      "hits": [
+        {
+          "file": "07",
+          "name": "07-荨麻疹.md",
+          "title": "疙瘩来无影去无踪，还伴有瘙痒，会是怎么回事？",
+          "parent_id": "07-荨麻疹-p2",
+          "distance": 0.32
+        },
+        {
+          "file": "07",
+          "name": "07-荨麻疹.md",
+          "title": "疙瘩来无影去无踪，还伴有瘙痒，会是怎么回事？",
+          "parent_id": "07-荨麻疹-p0",
+          "distance": 0.356
+        },
+        {
+          "file": "07",
+          "name": "07-荨麻疹.md",
+          "title": "疙瘩来无影去无踪，还伴有瘙痒，会是怎么回事？",
+          "parent_id": "07-荨麻疹-p3",
+          "distance": 0.383
+        }
+      ],
+      "hit1": true,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "urticaria",
+      "intent": "突发瘙痒性风团样皮疹",
+      "primary": "07",
+      "acceptable": [
+        "07"
+      ],
+      "variant": 2,
+      "query": "皮肤冒出一块一块的，痒得受不了，不一会儿又平了",
+      "hits": [
+        {
+          "file": "07",
+          "name": "07-荨麻疹.md",
+          "title": "疙瘩来无影去无踪，还伴有瘙痒，会是怎么回事？",
+          "parent_id": "07-荨麻疹-p2",
+          "distance": 0.3
+        },
+        {
+          "file": "07",
+          "name": "07-荨麻疹.md",
+          "title": "疙瘩来无影去无踪，还伴有瘙痒，会是怎么回事？",
+          "parent_id": "07-荨麻疹-p0",
+          "distance": 0.348
+        },
+        {
+          "file": "07",
+          "name": "07-荨麻疹.md",
+          "title": "疙瘩来无影去无踪，还伴有瘙痒，会是怎么回事？",
+          "parent_id": "07-荨麻疹-p3",
+          "distance": 0.358
+        }
+      ],
+      "hit1": true,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "urticaria",
+      "intent": "突发瘙痒性风团样皮疹",
+      "primary": "07",
+      "acceptable": [
+        "07"
+      ],
+      "variant": 3,
+      "query": "满身风疙瘩，又痒又消",
+      "hits": [
+        {
+          "file": "07",
+          "name": "07-荨麻疹.md",
+          "title": "疙瘩来无影去无踪，还伴有瘙痒，会是怎么回事？",
+          "parent_id": "07-荨麻疹-p2",
+          "distance": 0.312
+        },
+        {
+          "file": "07",
+          "name": "07-荨麻疹.md",
+          "title": "疙瘩来无影去无踪，还伴有瘙痒，会是怎么回事？",
+          "parent_id": "07-荨麻疹-p0",
+          "distance": 0.317
+        },
+        {
+          "file": "07",
+          "name": "07-荨麻疹.md",
+          "title": "疙瘩来无影去无踪，还伴有瘙痒，会是怎么回事？",
+          "parent_id": "07-荨麻疹-p1",
+          "distance": 0.392
+        }
+      ],
+      "hit1": true,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "rhinitis",
+      "intent": "季节性喷嚏清涕且不发烧",
+      "primary": "08",
+      "acceptable": [
+        "08"
+      ],
+      "variant": 1,
+      "query": "一到春天就连着打喷嚏，流清水鼻涕，不发烧",
+      "hits": [
+        {
+          "file": "08",
+          "name": "08-过敏性鼻炎还是感冒.md",
+          "title": "过敏性鼻炎还是感冒？主要看这几点！",
+          "parent_id": "08-过敏性鼻炎还是感冒-p1",
+          "distance": 0.293
+        },
+        {
+          "file": "08",
+          "name": "08-过敏性鼻炎还是感冒.md",
+          "title": "过敏性鼻炎还是感冒？主要看这几点！",
+          "parent_id": "08-过敏性鼻炎还是感冒-p2",
+          "distance": 0.33
+        },
+        {
+          "file": "08",
+          "name": "08-过敏性鼻炎还是感冒.md",
+          "title": "过敏性鼻炎还是感冒？主要看这几点！",
+          "parent_id": "08-过敏性鼻炎还是感冒-p0",
+          "distance": 0.335
+        }
+      ],
+      "hit1": true,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "rhinitis",
+      "intent": "季节性喷嚏清涕且不发烧",
+      "primary": "08",
+      "acceptable": [
+        "08"
+      ],
+      "variant": 2,
+      "query": "花粉季鼻子痒，喷嚏停不下来，人倒不烧",
+      "hits": [
+        {
+          "file": "08",
+          "name": "08-过敏性鼻炎还是感冒.md",
+          "title": "过敏性鼻炎还是感冒？主要看这几点！",
+          "parent_id": "08-过敏性鼻炎还是感冒-p0",
+          "distance": 0.285
+        },
+        {
+          "file": "08",
+          "name": "08-过敏性鼻炎还是感冒.md",
+          "title": "过敏性鼻炎还是感冒？主要看这几点！",
+          "parent_id": "08-过敏性鼻炎还是感冒-p1",
+          "distance": 0.354
+        },
+        {
+          "file": "08",
+          "name": "08-过敏性鼻炎还是感冒.md",
+          "title": "过敏性鼻炎还是感冒？主要看这几点！",
+          "parent_id": "08-过敏性鼻炎还是感冒-p2",
+          "distance": 0.385
+        }
+      ],
+      "hit1": true,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "rhinitis",
+      "intent": "季节性喷嚏清涕且不发烧",
+      "primary": "08",
+      "acceptable": [
+        "08"
+      ],
+      "variant": 3,
+      "query": "每年换季鼻子就像水龙头，连续打好几个喷嚏",
+      "hits": [
+        {
+          "file": "08",
+          "name": "08-过敏性鼻炎还是感冒.md",
+          "title": "过敏性鼻炎还是感冒？主要看这几点！",
+          "parent_id": "08-过敏性鼻炎还是感冒-p1",
+          "distance": 0.295
+        },
+        {
+          "file": "08",
+          "name": "08-过敏性鼻炎还是感冒.md",
+          "title": "过敏性鼻炎还是感冒？主要看这几点！",
+          "parent_id": "08-过敏性鼻炎还是感冒-p2",
+          "distance": 0.328
+        },
+        {
+          "file": "08",
+          "name": "08-过敏性鼻炎还是感冒.md",
+          "title": "过敏性鼻炎还是感冒？主要看这几点！",
+          "parent_id": "08-过敏性鼻炎还是感冒-p0",
+          "distance": 0.387
+        }
+      ],
+      "hit1": true,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "hfmd",
+      "intent": "儿童手口腔疱疹伴发热",
+      "primary": "09",
+      "acceptable": [
+        "09"
+      ],
+      "variant": 1,
+      "query": "小孩手上和嘴里起了小水疱，还发热",
+      "hits": [
+        {
+          "file": "09",
+          "name": "09-手足口病.md",
+          "title": "秋冬季到来，做好防护远离手足口病",
+          "parent_id": "09-手足口病-p0",
+          "distance": 0.386
+        },
+        {
+          "file": "09",
+          "name": "09-手足口病.md",
+          "title": "秋冬季到来，做好防护远离手足口病",
+          "parent_id": "09-手足口病-p1",
+          "distance": 0.425
+        },
+        {
+          "file": "04",
+          "name": "04-诺如病毒引起的急性胃肠炎.md",
+          "title": "洪涝灾害后如何预防诺如病毒等引起的病毒性胃肠炎",
+          "parent_id": "04-诺如病毒引起的急性胃肠炎-p0",
+          "distance": 0.448
+        }
+      ],
+      "hit1": true,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "hfmd",
+      "intent": "儿童手口腔疱疹伴发热",
+      "primary": "09",
+      "acceptable": [
+        "09"
+      ],
+      "variant": 2,
+      "query": "宝宝手心脚心有疹子，嘴里也破了，烧了一下",
+      "hits": [
+        {
+          "file": "09",
+          "name": "09-手足口病.md",
+          "title": "秋冬季到来，做好防护远离手足口病",
+          "parent_id": "09-手足口病-p0",
+          "distance": 0.384
+        },
+        {
+          "file": "04",
+          "name": "04-诺如病毒引起的急性胃肠炎.md",
+          "title": "洪涝灾害后如何预防诺如病毒等引起的病毒性胃肠炎",
+          "parent_id": "04-诺如病毒引起的急性胃肠炎-p1",
+          "distance": 0.402
+        },
+        {
+          "file": "09",
+          "name": "09-手足口病.md",
+          "title": "秋冬季到来，做好防护远离手足口病",
+          "parent_id": "09-手足口病-p1",
+          "distance": 0.427
+        }
+      ],
+      "hit1": true,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "hfmd",
+      "intent": "儿童手口腔疱疹伴发热",
+      "primary": "09",
+      "acceptable": [
+        "09"
+      ],
+      "variant": 3,
+      "query": "幼儿园的孩子手上长疱，口腔里也有",
+      "hits": [
+        {
+          "file": "09",
+          "name": "09-手足口病.md",
+          "title": "秋冬季到来，做好防护远离手足口病",
+          "parent_id": "09-手足口病-p1",
+          "distance": 0.389
+        },
+        {
+          "file": "09",
+          "name": "09-手足口病.md",
+          "title": "秋冬季到来，做好防护远离手足口病",
+          "parent_id": "09-手足口病-p0",
+          "distance": 0.393
+        },
+        {
+          "file": "04",
+          "name": "04-诺如病毒引起的急性胃肠炎.md",
+          "title": "洪涝灾害后如何预防诺如病毒等引起的病毒性胃肠炎",
+          "parent_id": "04-诺如病毒引起的急性胃肠炎-p1",
+          "distance": 0.457
+        }
+      ],
+      "hit1": true,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "hfmd-severe",
+      "intent": "疱疹后精神差、手脚凉",
+      "primary": "09",
+      "acceptable": [
+        "09",
+        "06"
+      ],
+      "variant": 1,
+      "query": "孩子手上长疱之后变得没精神，手脚凉，还出冷汗",
+      "hits": [
+        {
+          "file": "09",
+          "name": "09-手足口病.md",
+          "title": "秋冬季到来，做好防护远离手足口病",
+          "parent_id": "09-手足口病-p0",
+          "distance": 0.387
+        },
+        {
+          "file": "04",
+          "name": "04-诺如病毒引起的急性胃肠炎.md",
+          "title": "洪涝灾害后如何预防诺如病毒等引起的病毒性胃肠炎",
+          "parent_id": "04-诺如病毒引起的急性胃肠炎-p1",
+          "distance": 0.409
+        },
+        {
+          "file": "07",
+          "name": "07-荨麻疹.md",
+          "title": "疙瘩来无影去无踪，还伴有瘙痒，会是怎么回事？",
+          "parent_id": "07-荨麻疹-p3",
+          "distance": 0.442
+        }
+      ],
+      "hit1": true,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "hfmd-severe",
+      "intent": "疱疹后精神差、手脚凉",
+      "primary": "09",
+      "acceptable": [
+        "09",
+        "06"
+      ],
+      "variant": 2,
+      "query": "疹子出来以后孩子蔫了，手脚发凉，一直出汗",
+      "hits": [
+        {
+          "file": "07",
+          "name": "07-荨麻疹.md",
+          "title": "疙瘩来无影去无踪，还伴有瘙痒，会是怎么回事？",
+          "parent_id": "07-荨麻疹-p2",
+          "distance": 0.372
+        },
+        {
+          "file": "09",
+          "name": "09-手足口病.md",
+          "title": "秋冬季到来，做好防护远离手足口病",
+          "parent_id": "09-手足口病-p0",
+          "distance": 0.391
+        },
+        {
+          "file": "07",
+          "name": "07-荨麻疹.md",
+          "title": "疙瘩来无影去无踪，还伴有瘙痒，会是怎么回事？",
+          "parent_id": "07-荨麻疹-p1",
+          "distance": 0.394
+        }
+      ],
+      "hit1": false,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "hfmd-severe",
+      "intent": "疱疹后精神差、手脚凉",
+      "primary": "09",
+      "acceptable": [
+        "09",
+        "06"
+      ],
+      "variant": 3,
+      "query": "口腔和手上有疱的小朋友突然萎靡，末梢发凉",
+      "hits": [
+        {
+          "file": "09",
+          "name": "09-手足口病.md",
+          "title": "秋冬季到来，做好防护远离手足口病",
+          "parent_id": "09-手足口病-p0",
+          "distance": 0.356
+        },
+        {
+          "file": "09",
+          "name": "09-手足口病.md",
+          "title": "秋冬季到来，做好防护远离手足口病",
+          "parent_id": "09-手足口病-p1",
+          "distance": 0.418
+        },
+        {
+          "file": "04",
+          "name": "04-诺如病毒引起的急性胃肠炎.md",
+          "title": "洪涝灾害后如何预防诺如病毒等引起的病毒性胃肠炎",
+          "parent_id": "04-诺如病毒引起的急性胃肠炎-p1",
+          "distance": 0.446
+        }
+      ],
+      "hit1": true,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "pinkeye",
+      "intent": "传染性眼红流泪",
+      "primary": "10",
+      "acceptable": [
+        "10"
+      ],
+      "variant": 1,
+      "query": "眼睛又红又怕光，还流泪，同学也得了",
+      "hits": [
+        {
+          "file": "10",
+          "name": "10-急性出血性结膜炎.md",
+          "title": "急性出血性结膜炎（红眼病）",
+          "parent_id": "10-急性出血性结膜炎-p0",
+          "distance": 0.449
+        },
+        {
+          "file": "04",
+          "name": "04-诺如病毒引起的急性胃肠炎.md",
+          "title": "洪涝灾害后如何预防诺如病毒等引起的病毒性胃肠炎",
+          "parent_id": "04-诺如病毒引起的急性胃肠炎-p1",
+          "distance": 0.467
+        },
+        {
+          "file": "03",
+          "name": "03-流感一般有什么症状.md",
+          "title": "得了流感一般有什么症状",
+          "parent_id": "03-流感一般有什么症状-p0",
+          "distance": 0.568
+        }
+      ],
+      "hit1": true,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "pinkeye",
+      "intent": "传染性眼红流泪",
+      "primary": "10",
+      "acceptable": [
+        "10"
+      ],
+      "variant": 2,
+      "query": "一只眼红肿，觉得里面有沙子，班里好几个人一样",
+      "hits": [
+        {
+          "file": "10",
+          "name": "10-急性出血性结膜炎.md",
+          "title": "急性出血性结膜炎（红眼病）",
+          "parent_id": "10-急性出血性结膜炎-p0",
+          "distance": 0.492
+        },
+        {
+          "file": "07",
+          "name": "07-荨麻疹.md",
+          "title": "疙瘩来无影去无踪，还伴有瘙痒，会是怎么回事？",
+          "parent_id": "07-荨麻疹-p2",
+          "distance": 0.51
+        },
+        {
+          "file": "04",
+          "name": "04-诺如病毒引起的急性胃肠炎.md",
+          "title": "洪涝灾害后如何预防诺如病毒等引起的病毒性胃肠炎",
+          "parent_id": "04-诺如病毒引起的急性胃肠炎-p1",
+          "distance": 0.51
+        }
+      ],
+      "hit1": true,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "pinkeye",
+      "intent": "传染性眼红流泪",
+      "primary": "10",
+      "acceptable": [
+        "10"
+      ],
+      "variant": 3,
+      "query": "游泳之后眼睛红、流泪，传染得很快",
+      "hits": [
+        {
+          "file": "10",
+          "name": "10-急性出血性结膜炎.md",
+          "title": "急性出血性结膜炎（红眼病）",
+          "parent_id": "10-急性出血性结膜炎-p0",
+          "distance": 0.349
+        },
+        {
+          "file": "04",
+          "name": "04-诺如病毒引起的急性胃肠炎.md",
+          "title": "洪涝灾害后如何预防诺如病毒等引起的病毒性胃肠炎",
+          "parent_id": "04-诺如病毒引起的急性胃肠炎-p1",
+          "distance": 0.457
+        },
+        {
+          "file": "04",
+          "name": "04-诺如病毒引起的急性胃肠炎.md",
+          "title": "洪涝灾害后如何预防诺如病毒等引起的病毒性胃肠炎",
+          "parent_id": "04-诺如病毒引起的急性胃肠炎-p0",
+          "distance": 0.504
+        }
+      ],
+      "hit1": true,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "infant-cough",
+      "intent": "婴幼儿轻咳不发烧",
+      "primary": "12",
+      "acceptable": [
+        "12",
+        "02"
+      ],
+      "variant": 1,
+      "query": "宝宝咳嗽四五天了，不发烧，吃喝都正常",
+      "hits": [
+        {
+          "file": "12",
+          "name": "12-婴幼儿咳嗽.md",
+          "title": "婴幼儿咳嗽家长应该如何面对呢？",
+          "parent_id": "12-婴幼儿咳嗽-p1",
+          "distance": 0.22
+        },
+        {
+          "file": "12",
+          "name": "12-婴幼儿咳嗽.md",
+          "title": "婴幼儿咳嗽家长应该如何面对呢？",
+          "parent_id": "12-婴幼儿咳嗽-p0",
+          "distance": 0.255
+        },
+        {
+          "file": "02",
+          "name": "02-春季呼吸道病毒感染.md",
+          "title": "春夏之交的呼吸道病毒感染",
+          "parent_id": "02-春季呼吸道病毒感染-p1",
+          "distance": 0.306
+        }
+      ],
+      "hit1": true,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "infant-cough",
+      "intent": "婴幼儿轻咳不发烧",
+      "primary": "12",
+      "acceptable": [
+        "12",
+        "02"
+      ],
+      "variant": 2,
+      "query": "小孩就干咳，精神好，要不要先在家看看",
+      "hits": [
+        {
+          "file": "12",
+          "name": "12-婴幼儿咳嗽.md",
+          "title": "婴幼儿咳嗽家长应该如何面对呢？",
+          "parent_id": "12-婴幼儿咳嗽-p1",
+          "distance": 0.278
+        },
+        {
+          "file": "12",
+          "name": "12-婴幼儿咳嗽.md",
+          "title": "婴幼儿咳嗽家长应该如何面对呢？",
+          "parent_id": "12-婴幼儿咳嗽-p0",
+          "distance": 0.297
+        }
+      ],
+      "hit1": true,
+      "hit3": true,
+      "accept3": true
+    },
+    {
+      "id": "infant-cough",
+      "intent": "婴幼儿轻咳不发烧",
+      "primary": "12",
+      "acceptable": [
+        "12",
+        "02"
+      ],
+      "variant": 3,
+      "query": "孩子晚上咳，白天还行，没有发热",
+      "hits": [
+        {
+          "file": "12",
+          "name": "12-婴幼儿咳嗽.md",
+          "title": "婴幼儿咳嗽家长应该如何面对呢？",
+          "parent_id": "12-婴幼儿咳嗽-p0",
+          "distance": 0.28
+        },
+        {
+          "file": "12",
+          "name": "12-婴幼儿咳嗽.md",
+          "title": "婴幼儿咳嗽家长应该如何面对呢？",
+          "parent_id": "12-婴幼儿咳嗽-p1",
+          "distance": 0.312
+        },
+        {
+          "file": "02",
+          "name": "02-春季呼吸道病毒感染.md",
+          "title": "春夏之交的呼吸道病毒感染",
+          "parent_id": "02-春季呼吸道病毒感染-p1",
+          "distance": 0.33
+        }
+      ],
+      "hit1": true,
+      "hit3": true,
+      "accept3": true
+    }
+  ]
+}

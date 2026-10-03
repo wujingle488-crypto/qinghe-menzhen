@@ -1,0 +1,21 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --font-sans: "Noto Sans SC", "Raleway", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Noto Serif SC", "Lora", ui-serif, serif;
+  --color-ink: #163b5c;
+  --color-tide: #087c92;
+  --color-leaf: #12b8a6;
+  --color-paper: #f7fcfd;
+  --color-danger: #b91c1c;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

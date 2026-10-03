@@ -1,0 +1,1435 @@
+{
+  "summary": {
+    "queries": 33,
+    "intents": 11,
+    "k": [
+      1,
+      3,
+      5
+    ],
+    "rrf_k": 60,
+    "recall@1": 0.7424242424242424,
+    "recall@3": 0.9090909090909091,
+    "recall@5": 0.9090909090909091,
+    "hit@1": 0.9696969696969697,
+    "hit@3": 1.0,
+    "hit@5": 1.0,
+    "ndcg@1": 0.8888888888888888,
+    "ndcg@3": 0.9325808491001467,
+    "ndcg@5": 0.9325808491001467,
+    "mrr": 0.9848484848484849
+  },
+  "intents": [
+    {
+      "id": "cold",
+      "name": "普通感冒",
+      "queries": 3,
+      "mrr": 0.8333333333333334,
+      "recall@1": 0.6666666666666666,
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "hit@1": 0.6666666666666666,
+      "hit@3": 1.0,
+      "hit@5": 1.0,
+      "ndcg@1": 0.6666666666666666,
+      "ndcg@3": 0.8769765845238191,
+      "ndcg@5": 0.8769765845238191,
+      "weak": [
+        {
+          "query": "嗓子疼，有点低热，还流鼻涕",
+          "fused": [
+            "RHINITIS",
+            "URI",
+            "FLU"
+          ],
+          "channels": {
+            "关键词": [],
+            "向量": [
+              "RHINITIS",
+              "URI",
+              "FLU"
+            ],
+            "图谱": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "flu",
+      "name": "流感",
+      "queries": 3,
+      "mrr": 1.0,
+      "recall@1": 0.5,
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "hit@1": 1.0,
+      "hit@3": 1.0,
+      "hit@5": 1.0,
+      "ndcg@1": 1.0,
+      "ndcg@3": 1.0,
+      "ndcg@5": 1.0,
+      "weak": []
+    },
+    {
+      "id": "rhinitis",
+      "name": "过敏性鼻炎",
+      "queries": 3,
+      "mrr": 1.0,
+      "recall@1": 0.5,
+      "recall@3": 0.6666666666666666,
+      "recall@5": 0.6666666666666666,
+      "hit@1": 1.0,
+      "hit@3": 1.0,
+      "hit@5": 1.0,
+      "ndcg@1": 1.0,
+      "ndcg@3": 0.8841564380857067,
+      "ndcg@5": 0.8841564380857067,
+      "weak": [
+        {
+          "query": "鼻子痒，一低头就流清水，没有发热",
+          "fused": [
+            "RHINITIS"
+          ],
+          "channels": {
+            "关键词": [],
+            "向量": [
+              "RHINITIS"
+            ],
+            "图谱": [
+              "RHINITIS"
+            ]
+          }
+        },
+        {
+          "query": "过敏性鼻炎，清水样鼻涕，不是感冒那种发烧",
+          "fused": [
+            "RHINITIS",
+            "URTICARIA"
+          ],
+          "channels": {
+            "关键词": [
+              "URTICARIA"
+            ],
+            "向量": [
+              "RHINITIS"
+            ],
+            "图谱": [
+              "RHINITIS"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "urticaria",
+      "name": "荨麻疹",
+      "queries": 3,
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "hit@1": 1.0,
+      "hit@3": 1.0,
+      "hit@5": 1.0,
+      "ndcg@1": 1.0,
+      "ndcg@3": 1.0,
+      "ndcg@5": 1.0,
+      "weak": []
+    },
+    {
+      "id": "gastro",
+      "name": "病毒性胃肠炎",
+      "queries": 3,
+      "mrr": 1.0,
+      "recall@1": 0.5,
+      "recall@3": 0.5,
+      "recall@5": 0.5,
+      "hit@1": 1.0,
+      "hit@3": 1.0,
+      "hit@5": 1.0,
+      "ndcg@1": 1.0,
+      "ndcg@3": 0.8262346571285599,
+      "ndcg@5": 0.8262346571285599,
+      "weak": [
+        {
+          "query": "上吐下泻，拉水样便",
+          "fused": [
+            "GASTRO"
+          ],
+          "channels": {
+            "关键词": [
+              "GASTRO"
+            ],
+            "向量": [
+              "GASTRO"
+            ],
+            "图谱": [
+              "GASTRO"
+            ]
+          }
+        },
+        {
+          "query": "拉肚子还吐，担心脱水",
+          "fused": [
+            "GASTRO",
+            "FLU"
+          ],
+          "channels": {
+            "关键词": [
+              "GASTRO"
+            ],
+            "向量": [
+              "GASTRO",
+              "FLU"
+            ],
+            "图谱": [
+              "GASTRO"
+            ]
+          }
+        },
+        {
+          "query": "像诺如那样又吐又拉",
+          "fused": [
+            "GASTRO"
+          ],
+          "channels": {
+            "关键词": [],
+            "向量": [
+              "GASTRO"
+            ],
+            "图谱": [
+              "GASTRO"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "food",
+      "name": "食物中毒",
+      "queries": 3,
+      "mrr": 1.0,
+      "recall@1": 0.5,
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "hit@1": 1.0,
+      "hit@3": 1.0,
+      "hit@5": 1.0,
+      "ndcg@1": 0.5555555555555555,
+      "ndcg@3": 0.8644717206603377,
+      "ndcg@5": 0.8644717206603377,
+      "weak": []
+    },
+    {
+      "id": "migraine",
+      "name": "偏头痛",
+      "queries": 3,
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "hit@1": 1.0,
+      "hit@3": 1.0,
+      "hit@5": 1.0,
+      "ndcg@1": 1.0,
+      "ndcg@3": 1.0,
+      "ndcg@5": 1.0,
+      "weak": []
+    },
+    {
+      "id": "hfmd",
+      "name": "手足口病",
+      "queries": 3,
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "hit@1": 1.0,
+      "hit@3": 1.0,
+      "hit@5": 1.0,
+      "ndcg@1": 1.0,
+      "ndcg@3": 1.0,
+      "ndcg@5": 1.0,
+      "weak": []
+    },
+    {
+      "id": "eye",
+      "name": "红眼病",
+      "queries": 3,
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "hit@1": 1.0,
+      "hit@3": 1.0,
+      "hit@5": 1.0,
+      "ndcg@1": 1.0,
+      "ndcg@3": 1.0,
+      "ndcg@5": 1.0,
+      "weak": []
+    },
+    {
+      "id": "cough",
+      "name": "婴幼儿咳嗽",
+      "queries": 3,
+      "mrr": 1.0,
+      "recall@1": 0.5,
+      "recall@3": 0.8333333333333334,
+      "recall@5": 0.8333333333333334,
+      "hit@1": 1.0,
+      "hit@3": 1.0,
+      "hit@5": 1.0,
+      "ndcg@1": 0.5555555555555555,
+      "ndcg@3": 0.8065499397031911,
+      "ndcg@5": 0.8065499397031911,
+      "weak": [
+        {
+          "query": "小孩咳了好几天，精神不错",
+          "fused": [
+            "COUGH"
+          ],
+          "channels": {
+            "关键词": [],
+            "向量": [
+              "COUGH"
+            ],
+            "图谱": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "chest",
+      "name": "胸痛警示",
+      "queries": 3,
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "hit@1": 1.0,
+      "hit@3": 1.0,
+      "hit@5": 1.0,
+      "ndcg@1": 1.0,
+      "ndcg@3": 1.0,
+      "ndcg@5": 1.0,
+      "weak": []
+    }
+  ],
+  "rows": [
+    {
+      "intent": "cold",
+      "name": "普通感冒",
+      "query": "喉咙痛，低烧两天",
+      "relevant": {
+        "URI": 2
+      },
+      "channels": {
+        "关键词": [
+          "URI"
+        ],
+        "向量": [
+          "URI",
+          "COUGH",
+          "RHINITIS"
+        ],
+        "图谱": [
+          "URI"
+        ]
+      },
+      "fused": [
+        "URI",
+        "COUGH",
+        "RHINITIS"
+      ],
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 1.0,
+      "hit@3": 1.0,
+      "ndcg@3": 1.0,
+      "recall@5": 1.0,
+      "hit@5": 1.0,
+      "ndcg@5": 1.0
+    },
+    {
+      "intent": "cold",
+      "name": "普通感冒",
+      "query": "嗓子疼，有点低热，还流鼻涕",
+      "relevant": {
+        "URI": 2
+      },
+      "channels": {
+        "关键词": [],
+        "向量": [
+          "RHINITIS",
+          "URI",
+          "FLU"
+        ],
+        "图谱": []
+      },
+      "fused": [
+        "RHINITIS",
+        "URI",
+        "FLU"
+      ],
+      "mrr": 0.5,
+      "recall@1": 0.0,
+      "hit@1": 0.0,
+      "ndcg@1": 0.0,
+      "recall@3": 1.0,
+      "hit@3": 1.0,
+      "ndcg@3": 0.6309297535714574,
+      "recall@5": 1.0,
+      "hit@5": 1.0,
+      "ndcg@5": 0.6309297535714574
+    },
+    {
+      "intent": "cold",
+      "name": "普通感冒",
+      "query": "鼻塞咽痛，烧得不高",
+      "relevant": {
+        "URI": 2
+      },
+      "channels": {
+        "关键词": [
+          "URI"
+        ],
+        "向量": [
+          "RHINITIS",
+          "URI"
+        ],
+        "图谱": [
+          "URI"
+        ]
+      },
+      "fused": [
+        "URI",
+        "RHINITIS"
+      ],
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 1.0,
+      "hit@3": 1.0,
+      "ndcg@3": 1.0,
+      "recall@5": 1.0,
+      "hit@5": 1.0,
+      "ndcg@5": 1.0
+    },
+    {
+      "intent": "flu",
+      "name": "流感",
+      "query": "高烧三十九度，全身酸痛，特别没力气",
+      "relevant": {
+        "FLU": 2,
+        "URI": 1
+      },
+      "channels": {
+        "关键词": [
+          "FLU"
+        ],
+        "向量": [
+          "URI",
+          "CHEST",
+          "FLU"
+        ],
+        "图谱": [
+          "FLU"
+        ]
+      },
+      "fused": [
+        "FLU",
+        "URI",
+        "CHEST"
+      ],
+      "mrr": 1.0,
+      "recall@1": 0.5,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 1.0,
+      "hit@3": 1.0,
+      "ndcg@3": 1.0,
+      "recall@5": 1.0,
+      "hit@5": 1.0,
+      "ndcg@5": 1.0
+    },
+    {
+      "intent": "flu",
+      "name": "流感",
+      "query": "发高烧还寒战，骨头疼",
+      "relevant": {
+        "FLU": 2,
+        "URI": 1
+      },
+      "channels": {
+        "关键词": [
+          "FLU"
+        ],
+        "向量": [
+          "URI",
+          "FLU",
+          "CHEST",
+          "MIGRAINE"
+        ],
+        "图谱": [
+          "FLU"
+        ]
+      },
+      "fused": [
+        "FLU",
+        "URI",
+        "CHEST",
+        "MIGRAINE"
+      ],
+      "mrr": 1.0,
+      "recall@1": 0.5,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 1.0,
+      "hit@3": 1.0,
+      "ndcg@3": 1.0,
+      "recall@5": 1.0,
+      "hit@5": 1.0,
+      "ndcg@5": 1.0
+    },
+    {
+      "intent": "flu",
+      "name": "流感",
+      "query": "像流感，全身症状很重",
+      "relevant": {
+        "FLU": 2,
+        "URI": 1
+      },
+      "channels": {
+        "关键词": [
+          "FLU"
+        ],
+        "向量": [
+          "FLU",
+          "URI"
+        ],
+        "图谱": [
+          "FLU"
+        ]
+      },
+      "fused": [
+        "FLU",
+        "URI"
+      ],
+      "mrr": 1.0,
+      "recall@1": 0.5,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 1.0,
+      "hit@3": 1.0,
+      "ndcg@3": 1.0,
+      "recall@5": 1.0,
+      "hit@5": 1.0,
+      "ndcg@5": 1.0
+    },
+    {
+      "intent": "rhinitis",
+      "name": "过敏性鼻炎",
+      "query": "春天花粉一来就连续打喷嚏，流清水鼻涕，不发烧",
+      "relevant": {
+        "RHINITIS": 2,
+        "URI": 1
+      },
+      "channels": {
+        "关键词": [
+          "URI"
+        ],
+        "向量": [
+          "RHINITIS"
+        ],
+        "图谱": [
+          "RHINITIS",
+          "URI"
+        ]
+      },
+      "fused": [
+        "RHINITIS",
+        "URI"
+      ],
+      "mrr": 1.0,
+      "recall@1": 0.5,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 1.0,
+      "hit@3": 1.0,
+      "ndcg@3": 1.0,
+      "recall@5": 1.0,
+      "hit@5": 1.0,
+      "ndcg@5": 1.0
+    },
+    {
+      "intent": "rhinitis",
+      "name": "过敏性鼻炎",
+      "query": "鼻子痒，一低头就流清水，没有发热",
+      "relevant": {
+        "RHINITIS": 2,
+        "URI": 1
+      },
+      "channels": {
+        "关键词": [],
+        "向量": [
+          "RHINITIS"
+        ],
+        "图谱": [
+          "RHINITIS"
+        ]
+      },
+      "fused": [
+        "RHINITIS"
+      ],
+      "mrr": 1.0,
+      "recall@1": 0.5,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 0.5,
+      "hit@3": 1.0,
+      "ndcg@3": 0.8262346571285599,
+      "recall@5": 0.5,
+      "hit@5": 1.0,
+      "ndcg@5": 0.8262346571285599
+    },
+    {
+      "intent": "rhinitis",
+      "name": "过敏性鼻炎",
+      "query": "过敏性鼻炎，清水样鼻涕，不是感冒那种发烧",
+      "relevant": {
+        "RHINITIS": 2,
+        "URI": 1
+      },
+      "channels": {
+        "关键词": [
+          "URTICARIA"
+        ],
+        "向量": [
+          "RHINITIS"
+        ],
+        "图谱": [
+          "RHINITIS"
+        ]
+      },
+      "fused": [
+        "RHINITIS",
+        "URTICARIA"
+      ],
+      "mrr": 1.0,
+      "recall@1": 0.5,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 0.5,
+      "hit@3": 1.0,
+      "ndcg@3": 0.8262346571285599,
+      "recall@5": 0.5,
+      "hit@5": 1.0,
+      "ndcg@5": 0.8262346571285599
+    },
+    {
+      "intent": "urticaria",
+      "name": "荨麻疹",
+      "query": "身上起了一片风团，很痒",
+      "relevant": {
+        "URTICARIA": 2
+      },
+      "channels": {
+        "关键词": [
+          "URTICARIA"
+        ],
+        "向量": [
+          "URTICARIA"
+        ],
+        "图谱": [
+          "URTICARIA"
+        ]
+      },
+      "fused": [
+        "URTICARIA"
+      ],
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 1.0,
+      "hit@3": 1.0,
+      "ndcg@3": 1.0,
+      "recall@5": 1.0,
+      "hit@5": 1.0,
+      "ndcg@5": 1.0
+    },
+    {
+      "intent": "urticaria",
+      "name": "荨麻疹",
+      "query": "皮肤突然出一片痒包，过几小时又消了",
+      "relevant": {
+        "URTICARIA": 2
+      },
+      "channels": {
+        "关键词": [],
+        "向量": [
+          "URTICARIA"
+        ],
+        "图谱": []
+      },
+      "fused": [
+        "URTICARIA"
+      ],
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 1.0,
+      "hit@3": 1.0,
+      "ndcg@3": 1.0,
+      "recall@5": 1.0,
+      "hit@5": 1.0,
+      "ndcg@5": 1.0
+    },
+    {
+      "intent": "urticaria",
+      "name": "荨麻疹",
+      "query": "起了风疙瘩，又痒又来去很快",
+      "relevant": {
+        "URTICARIA": 2
+      },
+      "channels": {
+        "关键词": [],
+        "向量": [
+          "URTICARIA"
+        ],
+        "图谱": [
+          "URTICARIA"
+        ]
+      },
+      "fused": [
+        "URTICARIA"
+      ],
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 1.0,
+      "hit@3": 1.0,
+      "ndcg@3": 1.0,
+      "recall@5": 1.0,
+      "hit@5": 1.0,
+      "ndcg@5": 1.0
+    },
+    {
+      "intent": "gastro",
+      "name": "病毒性胃肠炎",
+      "query": "上吐下泻，拉水样便",
+      "relevant": {
+        "GASTRO": 2,
+        "FOOD": 1
+      },
+      "channels": {
+        "关键词": [
+          "GASTRO"
+        ],
+        "向量": [
+          "GASTRO"
+        ],
+        "图谱": [
+          "GASTRO"
+        ]
+      },
+      "fused": [
+        "GASTRO"
+      ],
+      "mrr": 1.0,
+      "recall@1": 0.5,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 0.5,
+      "hit@3": 1.0,
+      "ndcg@3": 0.8262346571285599,
+      "recall@5": 0.5,
+      "hit@5": 1.0,
+      "ndcg@5": 0.8262346571285599
+    },
+    {
+      "intent": "gastro",
+      "name": "病毒性胃肠炎",
+      "query": "拉肚子还吐，担心脱水",
+      "relevant": {
+        "GASTRO": 2,
+        "FOOD": 1
+      },
+      "channels": {
+        "关键词": [
+          "GASTRO"
+        ],
+        "向量": [
+          "GASTRO",
+          "FLU"
+        ],
+        "图谱": [
+          "GASTRO"
+        ]
+      },
+      "fused": [
+        "GASTRO",
+        "FLU"
+      ],
+      "mrr": 1.0,
+      "recall@1": 0.5,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 0.5,
+      "hit@3": 1.0,
+      "ndcg@3": 0.8262346571285599,
+      "recall@5": 0.5,
+      "hit@5": 1.0,
+      "ndcg@5": 0.8262346571285599
+    },
+    {
+      "intent": "gastro",
+      "name": "病毒性胃肠炎",
+      "query": "像诺如那样又吐又拉",
+      "relevant": {
+        "GASTRO": 2,
+        "FOOD": 1
+      },
+      "channels": {
+        "关键词": [],
+        "向量": [
+          "GASTRO"
+        ],
+        "图谱": [
+          "GASTRO"
+        ]
+      },
+      "fused": [
+        "GASTRO"
+      ],
+      "mrr": 1.0,
+      "recall@1": 0.5,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 0.5,
+      "hit@3": 1.0,
+      "ndcg@3": 0.8262346571285599,
+      "recall@5": 0.5,
+      "hit@5": 1.0,
+      "ndcg@5": 0.8262346571285599
+    },
+    {
+      "intent": "food",
+      "name": "食物中毒",
+      "query": "吃了剩菜两小时后开始吐和拉肚子，同桌的人也这样",
+      "relevant": {
+        "FOOD": 2,
+        "GASTRO": 1
+      },
+      "channels": {
+        "关键词": [
+          "GASTRO"
+        ],
+        "向量": [
+          "FOOD",
+          "GASTRO"
+        ],
+        "图谱": [
+          "FOOD",
+          "GASTRO"
+        ]
+      },
+      "fused": [
+        "GASTRO",
+        "FOOD"
+      ],
+      "mrr": 1.0,
+      "recall@1": 0.5,
+      "hit@1": 1.0,
+      "ndcg@1": 0.3333333333333333,
+      "recall@3": 1.0,
+      "hit@3": 1.0,
+      "ndcg@3": 0.7967075809905066,
+      "recall@5": 1.0,
+      "hit@5": 1.0,
+      "ndcg@5": 0.7967075809905066
+    },
+    {
+      "intent": "food",
+      "name": "食物中毒",
+      "query": "怀疑食物中毒，一起吃饭的人都难受",
+      "relevant": {
+        "FOOD": 2,
+        "GASTRO": 1
+      },
+      "channels": {
+        "关键词": [],
+        "向量": [
+          "FOOD",
+          "GASTRO",
+          "CHEST"
+        ],
+        "图谱": [
+          "FOOD"
+        ]
+      },
+      "fused": [
+        "FOOD",
+        "GASTRO",
+        "CHEST"
+      ],
+      "mrr": 1.0,
+      "recall@1": 0.5,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 1.0,
+      "hit@3": 1.0,
+      "ndcg@3": 1.0,
+      "recall@5": 1.0,
+      "hit@5": 1.0,
+      "ndcg@5": 1.0
+    },
+    {
+      "intent": "food",
+      "name": "食物中毒",
+      "query": "剩饭没热透，吃完腹痛腹泻",
+      "relevant": {
+        "FOOD": 2,
+        "GASTRO": 1
+      },
+      "channels": {
+        "关键词": [
+          "GASTRO"
+        ],
+        "向量": [
+          "FOOD",
+          "GASTRO"
+        ],
+        "图谱": [
+          "GASTRO"
+        ]
+      },
+      "fused": [
+        "GASTRO",
+        "FOOD"
+      ],
+      "mrr": 1.0,
+      "recall@1": 0.5,
+      "hit@1": 1.0,
+      "ndcg@1": 0.3333333333333333,
+      "recall@3": 1.0,
+      "hit@3": 1.0,
+      "ndcg@3": 0.7967075809905066,
+      "recall@5": 1.0,
+      "hit@5": 1.0,
+      "ndcg@5": 0.7967075809905066
+    },
+    {
+      "intent": "migraine",
+      "name": "偏头痛",
+      "query": "一边太阳穴跳着疼，怕光，还想吐",
+      "relevant": {
+        "MIGRAINE": 2
+      },
+      "channels": {
+        "关键词": [
+          "MIGRAINE"
+        ],
+        "向量": [
+          "GASTRO",
+          "CHEST",
+          "MIGRAINE",
+          "URTICARIA"
+        ],
+        "图谱": [
+          "MIGRAINE"
+        ]
+      },
+      "fused": [
+        "MIGRAINE",
+        "GASTRO",
+        "CHEST",
+        "URTICARIA"
+      ],
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 1.0,
+      "hit@3": 1.0,
+      "ndcg@3": 1.0,
+      "recall@5": 1.0,
+      "hit@5": 1.0,
+      "ndcg@5": 1.0
+    },
+    {
+      "intent": "migraine",
+      "name": "偏头痛",
+      "query": "偏头痛，怕光怕吵",
+      "relevant": {
+        "MIGRAINE": 2
+      },
+      "channels": {
+        "关键词": [
+          "MIGRAINE"
+        ],
+        "向量": [
+          "MIGRAINE"
+        ],
+        "图谱": [
+          "MIGRAINE"
+        ]
+      },
+      "fused": [
+        "MIGRAINE"
+      ],
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 1.0,
+      "hit@3": 1.0,
+      "ndcg@3": 1.0,
+      "recall@5": 1.0,
+      "hit@5": 1.0,
+      "ndcg@5": 1.0
+    },
+    {
+      "intent": "migraine",
+      "name": "偏头痛",
+      "query": "一侧头痛一跳一跳的，头疼",
+      "relevant": {
+        "MIGRAINE": 2
+      },
+      "channels": {
+        "关键词": [
+          "MIGRAINE"
+        ],
+        "向量": [
+          "MIGRAINE"
+        ],
+        "图谱": [
+          "MIGRAINE"
+        ]
+      },
+      "fused": [
+        "MIGRAINE"
+      ],
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 1.0,
+      "hit@3": 1.0,
+      "ndcg@3": 1.0,
+      "recall@5": 1.0,
+      "hit@5": 1.0,
+      "ndcg@5": 1.0
+    },
+    {
+      "intent": "hfmd",
+      "name": "手足口病",
+      "query": "小朋友手上和口腔里有疱疹",
+      "relevant": {
+        "HFMD": 2
+      },
+      "channels": {
+        "关键词": [],
+        "向量": [
+          "HFMD",
+          "GASTRO"
+        ],
+        "图谱": []
+      },
+      "fused": [
+        "HFMD",
+        "GASTRO"
+      ],
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 1.0,
+      "hit@3": 1.0,
+      "ndcg@3": 1.0,
+      "recall@5": 1.0,
+      "hit@5": 1.0,
+      "ndcg@5": 1.0
+    },
+    {
+      "intent": "hfmd",
+      "name": "手足口病",
+      "query": "幼儿园有人手足口，孩子手心和嘴里起疱",
+      "relevant": {
+        "HFMD": 2
+      },
+      "channels": {
+        "关键词": [],
+        "向量": [
+          "HFMD"
+        ],
+        "图谱": [
+          "HFMD"
+        ]
+      },
+      "fused": [
+        "HFMD"
+      ],
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 1.0,
+      "hit@3": 1.0,
+      "ndcg@3": 1.0,
+      "recall@5": 1.0,
+      "hit@5": 1.0,
+      "ndcg@5": 1.0
+    },
+    {
+      "intent": "hfmd",
+      "name": "手足口病",
+      "query": "孩子手上有疱疹，还发烧",
+      "relevant": {
+        "HFMD": 2
+      },
+      "channels": {
+        "关键词": [],
+        "向量": [
+          "HFMD",
+          "URI",
+          "CONJUNCTIVITIS",
+          "GASTRO"
+        ],
+        "图谱": []
+      },
+      "fused": [
+        "HFMD",
+        "URI",
+        "CONJUNCTIVITIS",
+        "GASTRO"
+      ],
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 1.0,
+      "hit@3": 1.0,
+      "ndcg@3": 1.0,
+      "recall@5": 1.0,
+      "hit@5": 1.0,
+      "ndcg@5": 1.0
+    },
+    {
+      "intent": "eye",
+      "name": "红眼病",
+      "query": "眼睛又红又肿，同学也得了红眼病",
+      "relevant": {
+        "CONJUNCTIVITIS": 2
+      },
+      "channels": {
+        "关键词": [],
+        "向量": [
+          "CONJUNCTIVITIS",
+          "GASTRO",
+          "URTICARIA"
+        ],
+        "图谱": [
+          "CONJUNCTIVITIS"
+        ]
+      },
+      "fused": [
+        "CONJUNCTIVITIS",
+        "GASTRO",
+        "URTICARIA"
+      ],
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 1.0,
+      "hit@3": 1.0,
+      "ndcg@3": 1.0,
+      "recall@5": 1.0,
+      "hit@5": 1.0,
+      "ndcg@5": 1.0
+    },
+    {
+      "intent": "eye",
+      "name": "红眼病",
+      "query": "红眼病，眼红还流泪",
+      "relevant": {
+        "CONJUNCTIVITIS": 2
+      },
+      "channels": {
+        "关键词": [],
+        "向量": [
+          "CONJUNCTIVITIS",
+          "GASTRO",
+          "FLU",
+          "RHINITIS",
+          "MIGRAINE"
+        ],
+        "图谱": [
+          "CONJUNCTIVITIS"
+        ]
+      },
+      "fused": [
+        "CONJUNCTIVITIS",
+        "GASTRO",
+        "FLU",
+        "RHINITIS",
+        "MIGRAINE"
+      ],
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 1.0,
+      "hit@3": 1.0,
+      "ndcg@3": 1.0,
+      "recall@5": 1.0,
+      "hit@5": 1.0,
+      "ndcg@5": 1.0
+    },
+    {
+      "intent": "eye",
+      "name": "红眼病",
+      "query": "结膜炎，眼睛红",
+      "relevant": {
+        "CONJUNCTIVITIS": 2
+      },
+      "channels": {
+        "关键词": [],
+        "向量": [
+          "CONJUNCTIVITIS",
+          "GASTRO",
+          "URTICARIA",
+          "RHINITIS"
+        ],
+        "图谱": [
+          "CONJUNCTIVITIS"
+        ]
+      },
+      "fused": [
+        "CONJUNCTIVITIS",
+        "GASTRO",
+        "URTICARIA",
+        "RHINITIS"
+      ],
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 1.0,
+      "hit@3": 1.0,
+      "ndcg@3": 1.0,
+      "recall@5": 1.0,
+      "hit@5": 1.0,
+      "ndcg@5": 1.0
+    },
+    {
+      "intent": "cough",
+      "name": "婴幼儿咳嗽",
+      "query": "宝宝咳嗽四五天了，没有发烧，精神还好",
+      "relevant": {
+        "COUGH": 2,
+        "URI": 1
+      },
+      "channels": {
+        "关键词": [
+          "URI"
+        ],
+        "向量": [
+          "COUGH",
+          "URI"
+        ],
+        "图谱": [
+          "COUGH",
+          "URI"
+        ]
+      },
+      "fused": [
+        "URI",
+        "COUGH"
+      ],
+      "mrr": 1.0,
+      "recall@1": 0.5,
+      "hit@1": 1.0,
+      "ndcg@1": 0.3333333333333333,
+      "recall@3": 1.0,
+      "hit@3": 1.0,
+      "ndcg@3": 0.7967075809905066,
+      "recall@5": 1.0,
+      "hit@5": 1.0,
+      "ndcg@5": 0.7967075809905066
+    },
+    {
+      "intent": "cough",
+      "name": "婴幼儿咳嗽",
+      "query": "婴幼儿咳嗽，不发热",
+      "relevant": {
+        "COUGH": 2,
+        "URI": 1
+      },
+      "channels": {
+        "关键词": [
+          "URI"
+        ],
+        "向量": [
+          "COUGH",
+          "URI"
+        ],
+        "图谱": [
+          "COUGH",
+          "URI"
+        ]
+      },
+      "fused": [
+        "URI",
+        "COUGH"
+      ],
+      "mrr": 1.0,
+      "recall@1": 0.5,
+      "hit@1": 1.0,
+      "ndcg@1": 0.3333333333333333,
+      "recall@3": 1.0,
+      "hit@3": 1.0,
+      "ndcg@3": 0.7967075809905066,
+      "recall@5": 1.0,
+      "hit@5": 1.0,
+      "ndcg@5": 0.7967075809905066
+    },
+    {
+      "intent": "cough",
+      "name": "婴幼儿咳嗽",
+      "query": "小孩咳了好几天，精神不错",
+      "relevant": {
+        "COUGH": 2,
+        "URI": 1
+      },
+      "channels": {
+        "关键词": [],
+        "向量": [
+          "COUGH"
+        ],
+        "图谱": []
+      },
+      "fused": [
+        "COUGH"
+      ],
+      "mrr": 1.0,
+      "recall@1": 0.5,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 0.5,
+      "hit@3": 1.0,
+      "ndcg@3": 0.8262346571285599,
+      "recall@5": 0.5,
+      "hit@5": 1.0,
+      "ndcg@5": 0.8262346571285599
+    },
+    {
+      "intent": "chest",
+      "name": "胸痛警示",
+      "query": "突然胸口疼，出冷汗",
+      "relevant": {
+        "CHEST": 2
+      },
+      "channels": {
+        "关键词": [],
+        "向量": [
+          "CHEST",
+          "URI",
+          "COUGH",
+          "FLU"
+        ],
+        "图谱": [
+          "CHEST"
+        ]
+      },
+      "fused": [
+        "CHEST",
+        "URI",
+        "COUGH",
+        "FLU"
+      ],
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 1.0,
+      "hit@3": 1.0,
+      "ndcg@3": 1.0,
+      "recall@5": 1.0,
+      "hit@5": 1.0,
+      "ndcg@5": 1.0
+    },
+    {
+      "intent": "chest",
+      "name": "胸痛警示",
+      "query": "胸痛还冒冷汗",
+      "relevant": {
+        "CHEST": 2
+      },
+      "channels": {
+        "关键词": [],
+        "向量": [
+          "CHEST",
+          "URI",
+          "MIGRAINE",
+          "RHINITIS"
+        ],
+        "图谱": [
+          "CHEST"
+        ]
+      },
+      "fused": [
+        "CHEST",
+        "URI",
+        "MIGRAINE",
+        "RHINITIS"
+      ],
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 1.0,
+      "hit@3": 1.0,
+      "ndcg@3": 1.0,
+      "recall@5": 1.0,
+      "hit@5": 1.0,
+      "ndcg@5": 1.0
+    },
+    {
+      "intent": "chest",
+      "name": "胸痛警示",
+      "query": "胸口像心脏病那样疼",
+      "relevant": {
+        "CHEST": 2
+      },
+      "channels": {
+        "关键词": [],
+        "向量": [
+          "CHEST"
+        ],
+        "图谱": [
+          "CHEST"
+        ]
+      },
+      "fused": [
+        "CHEST"
+      ],
+      "mrr": 1.0,
+      "recall@1": 1.0,
+      "hit@1": 1.0,
+      "ndcg@1": 1.0,
+      "recall@3": 1.0,
+      "hit@3": 1.0,
+      "ndcg@3": 1.0,
+      "recall@5": 1.0,
+      "hit@5": 1.0,
+      "ndcg@5": 1.0
+    }
+  ]
+}

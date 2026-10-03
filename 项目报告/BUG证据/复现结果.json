@@ -1,0 +1,77 @@
+{
+  "generatedAt": "2026-10-03 13:32:31",
+  "bug01": {
+    "attempts": [
+      {
+        "attempt": 1,
+        "query": "流感",
+        "reproduced": true
+      },
+      {
+        "attempt": 2,
+        "query": "流感",
+        "reproduced": true
+      },
+      {
+        "attempt": 3,
+        "query": "流感",
+        "reproduced": true
+      }
+    ]
+  },
+  "bug02": {
+    "attempts": [
+      {
+        "attempt": 1,
+        "title": "普通感冒和流感不要混为一谈",
+        "category": "用药指南",
+        "keywords": "感冒,咽痛,流涕,抗生素",
+        "reproduced": true
+      },
+      {
+        "attempt": 2,
+        "title": "普通感冒和流感不要混为一谈",
+        "category": "用药指南",
+        "keywords": "感冒,咽痛,流涕,抗生素",
+        "reproduced": true
+      },
+      {
+        "attempt": 3,
+        "title": "普通感冒和流感不要混为一谈",
+        "category": "用药指南",
+        "keywords": "感冒,咽痛,流涕,抗生素",
+        "reproduced": true
+      }
+    ]
+  },
+  "bug03": {
+    "profileId": 1,
+    "profileName": "李四女",
+    "attempts": [
+      {
+        "attempt": 1,
+        "sessionId": 634,
+        "selectedProfileId": 1,
+        "profileLinked": false,
+        "reply": "你叫什么名字呀？另外是哪里不舒服、这样多久了，有没有发烧呢？",
+        "reproduced": true
+      },
+      {
+        "attempt": 2,
+        "sessionId": 635,
+        "selectedProfileId": 1,
+        "profileLinked": false,
+        "reply": "请问您哪里不舒服，这种情况持续多久了，有没有发烧呢？",
+        "reproduced": true
+      },
+      {
+        "attempt": 3,
+        "sessionId": 636,
+        "selectedProfileId": 1,
+        "profileLinked": false,
+        "reply": "请问你哪里不舒服，这种情况持续多久了，有没有发烧呢？",
+        "reproduced": true
+      }
+    ]
+  }
+}

@@ -33,8 +33,8 @@ rag:
   rrf-k: 60
 web-search:
   enabled: true
-  provider: duckduckgo
+  provider: bing
   mcp-url:
   mcp-tool-name: web_search
-  timeout-ms: 2500
-  max-results: 3
+  timeout-ms: 8000
+  max-results: 5

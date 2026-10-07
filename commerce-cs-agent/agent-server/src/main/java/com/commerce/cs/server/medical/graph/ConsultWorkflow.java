@@ -135,7 +135,7 @@ public class ConsultWorkflow {
         ConsultTurn turn = turn(state);
         turn.slots = ConsultIntake.read(turn.history, support.ledger().diseases(), support.ledger().symptoms());
         int asked = turn.memory.askCount;
-        if (turn.memory.profileLinked && support.askingAboutSelf(turn.content)) {
+        if (turn.memory.profileLinked && support.askingAboutSelf(turn.content, turn.memory, turn.session.getBuyerId())) {
             turn.directAnswer = true;
             turn.aboutSelf = true;
             turn.route = ConsultTurn.ROUTE_READY;
@@ -143,23 +143,16 @@ public class ConsultWorkflow {
             support.checkpoint(turn, NODE_INTAKE_AGENT);
             return Map.of(KEY_TURN, turn);
         }
-        if (ConsultIntake.isCasualChat(turn.content, turn.slots)) {
-            String reply = ConsultIntake.casualGuideReply(turn.content);
-            turn.memory.pushTurn("助手", reply);
-            turn.reply = reply;
-            turn.card = null;
-            turn.steps.add(new Step("progress", "先正常聊聊，再引导症状"));
-            turn.route = ConsultTurn.ROUTE_ASK;
-            support.checkpoint(turn, NODE_INTAKE_AGENT);
-            return Map.of(KEY_TURN, turn);
-        }
+        // 统一原则：还没采到任何症状槽位时，整轮都走 LLM 直接答，绝不进规则追问。
+        // 只有已经进入症状采集（槽位有信号但未齐）时，才由模型决定继续追问还是直接答。
+        boolean inSymptomIntake = turn.slots.site() || turn.slots.duration() || turn.slots.fever();
         if (!ConsultIntake.stopRequested(turn.content) && asked < ConsultIntake.MAX_ASKS && !turn.slots.complete()
-                && support.answerNow(turn.history, turn.slots,
-                support.profileContext(turn.memory, turn.session.getBuyerId()))) {
+                && (!inSymptomIntake || support.answerNow(turn.history, turn.slots,
+                support.profileContext(turn.memory, turn.session.getBuyerId())))) {
             turn.directAnswer = true;
-            turn.webSearch = true;
             turn.route = ConsultTurn.ROUTE_READY;
-            turn.steps.add(new Step("progress", "这个问题可以直接回答"));
+            turn.steps.add(new Step("progress",
+                    turn.webSearch ? "由模型回答（可联网）" : "由模型直接回答"));
             support.checkpoint(turn, NODE_INTAKE_AGENT);
             return Map.of(KEY_TURN, turn);
         }
@@ -198,25 +191,28 @@ public class ConsultWorkflow {
         boolean wantWeb = turn.webSearch && webProps.isEnabled();
         turn.steps.add(new Step("retrieving", wantWeb ? "正在并行检索知识库与联网资料" : "正在检索知识库"));
 
-        long started = System.nanoTime();
-        CompletableFuture<RagFacade.Bundle> ragFuture = CompletableFuture.supplyAsync(() -> rag.retrieve(turn.history));
+        String searchQ = support.webQuery(turn);
+        boolean skipKb = turn.directAnswer;
+        CompletableFuture<RagFacade.Bundle> ragFuture = skipKb
+                ? CompletableFuture.completedFuture(new RagFacade.Bundle(List.of(), false, false, false, "非问诊不检索医学知识库"))
+                : CompletableFuture.supplyAsync(() -> rag.retrieve(turn.history));
         CompletableFuture<List<RagFacade.Hit>> webFuture = wantWeb
-                ? CompletableFuture.supplyAsync(() -> webSearch.search(turn.content))
+                ? CompletableFuture.supplyAsync(() -> webSearch.search(searchQ))
                 : CompletableFuture.completedFuture(List.of());
 
         turn.bundle = ragFuture.join();
         List<RagFacade.Hit> webHits = List.of();
         if (wantWeb) {
-            long spentMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - started);
-            long remain = Math.max(200L, webProps.getTimeoutMs() - spentMs);
             try {
-                webHits = webFuture.get(remain, TimeUnit.MILLISECONDS);
+                webHits = webFuture.get(Math.max(webProps.getTimeoutMs(), 3000L), TimeUnit.MILLISECONDS);
             } catch (Exception ex) {
                 webHits = List.of();
             }
         }
         turn.webHits = webHits == null ? List.of() : webHits;
-        support.keepRelevant(turn);
+        if (!turn.directAnswer) {
+            support.keepRelevant(turn);
+        }
 
         String code = turn.bundle.hits().stream()
                 .filter(hit -> hit.diseaseCode() != null && !hit.diseaseCode().isBlank())
@@ -239,7 +235,7 @@ public class ConsultWorkflow {
             support.trace(turn.sessionId, "检索", action, turn.content,
                     support.retrieveTrace(turn.bundle, turn.webHits), null);
         }
-        if (wantWeb) {
+        if (wantWeb && !turn.directAnswer) {
             List<RagFacade.Hit> forIngest = new ArrayList<>(turn.webHits);
             webFuture.whenComplete((late, err) -> {
                 List<RagFacade.Hit> batch = forIngest;
@@ -263,13 +259,14 @@ public class ConsultWorkflow {
             turn.longTerm = support.userMemories().recall(turn.session.getBuyerId());
         }
         if (turn.directAnswer) {
-            String kb = turn.bundle == null || turn.bundle.hits() == null ? "" : turn.bundle.hits().stream()
-                    .map(hit -> "- " + hit.title() + "：" + hit.text())
-                    .collect(Collectors.joining("\n"));
+            String kb = "";
             String web = turn.webHits == null ? "" : turn.webHits.stream()
-                    .map(hit -> "- " + hit.title() + "：" + hit.text())
+                    .map(hit -> "- [" + (hit.channel() == null ? "联网" : hit.channel()) + "] "
+                            + hit.title() + "：" + hit.text())
                     .collect(Collectors.joining("\n"));
-            String focus = turn.aboutSelf ? turn.history + "\n（这一问只按就诊卡回答本人信息，不要展开前面的症状。）" : turn.history;
+            String focus = turn.aboutSelf
+                    ? turn.history + "\n（这一问只按上方 [就诊卡] 回答卡上姓名对应的人的资料；有登记的身高体重等必须直接报出，不要说材料里没有。）"
+                    : turn.history;
             String answer = support.directAnswer(focus, kb, web,
                     support.brief(turn.memory, turn.longTerm, turn.session.getBuyerId()));
             boolean fromModel = !answer.isBlank();

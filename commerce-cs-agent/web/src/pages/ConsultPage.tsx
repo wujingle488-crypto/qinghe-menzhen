@@ -18,7 +18,14 @@ export type ConsultCard = {
   chronicCaution?: string;
 };
 
-type Line = { role: "user" | "assistant" | "progress"; text: string; card?: ConsultCard | null; images?: string[] };
+type Line = {
+  role: "user" | "assistant" | "progress";
+  text: string;
+  card?: ConsultCard | null;
+  images?: string[];
+  webHits?: number;
+  webSearch?: boolean;
+};
 
 function PersonMark() {
   return (
@@ -521,13 +528,27 @@ export function ConsultPage({
         if (!line.startsWith("data:")) continue;
         const data = line.slice(5).trim();
         if (eventName === "progress" || eventName === "retrieving" || eventName === "generating") {
-          setLines((prev) => [...prev, { role: "progress", text: data }]);
+          setLines((prev) => {
+            const withoutOld = prev.filter((line) => line.role !== "progress");
+            return [...withoutOld, { role: "progress", text: data }];
+          });
         }
         if (eventName === "result") {
-          const body = JSON.parse(data) as { reply?: string; card?: ConsultCard | null };
+          const body = JSON.parse(data) as {
+            reply?: string;
+            card?: ConsultCard | null;
+            webSearch?: boolean;
+            webHits?: number;
+          };
           setLines((prev) => [
             ...prev.filter((line) => line.role !== "progress"),
-            { role: "assistant", text: body.reply || "（无回复）", card: body.card }
+            {
+              role: "assistant",
+              text: body.reply || "（无回复）",
+              card: body.card,
+              webSearch: Boolean(body.webSearch),
+              webHits: Number(body.webHits ?? 0)
+            }
           ]);
         }
       }
@@ -791,11 +812,29 @@ export function ConsultPage({
             </div>
           ) : (
             lines.map((line, index) =>
-              line.role === "progress" ? null : (
+              line.role === "progress" ? (
+                <div key={index} className="qh-row assistant">
+                  <Speaker who="assistant" />
+                  <div>
+                    <p className="qh-who">青禾</p>
+                    <div className="qh-bubble qh-progress" aria-live="polite">
+                      <span className="qh-dots"><i /><i /><i /></span>
+                      <em>{line.text}</em>
+                    </div>
+                  </div>
+                </div>
+              ) : (
                 <div key={index} className={`qh-row ${line.role}`}>
                   <Speaker who={line.role === "user" ? "user" : "assistant"} />
                   <div>
-                    <p className="qh-who">{line.role === "user" ? "你" : "青禾"}</p>
+                    <p className="qh-who">
+                      {line.role === "user" ? "你" : "青禾"}
+                      {line.role === "assistant" && line.webSearch ? (
+                        <span className={`qh-web-tag${(line.webHits ?? 0) > 0 ? " used" : ""}`}>
+                          {(line.webHits ?? 0) > 0 ? `已联网 · ${line.webHits} 条` : "已尝试联网"}
+                        </span>
+                      ) : null}
+                    </p>
                     <div className={`qh-bubble ${line.card?.redFlag ? "danger" : ""}`}>
                       {line.role === "assistant" ? (
                         <MarkdownBody text={line.text} className="prose-p:my-2 prose-headings:text-ink" />
@@ -819,7 +858,7 @@ export function ConsultPage({
               )
             )
           )}
-          {!welcome && busy ? (
+          {!welcome && busy && !lines.some((line) => line.role === "progress") ? (
             <div className="qh-row assistant">
               <Speaker who="assistant" />
               <div>
@@ -847,11 +886,14 @@ export function ConsultPage({
           <div className="qh-compose-box">
             <div className="qh-compose-top">
               <label htmlFor="symptom"><Ico name="medical_card.svg" />症状描述</label>
-              <label className="qh-web">
+              <label className={`qh-web${webSearch ? " is-on" : ""}`} title="开启后，回答时可检索公开网页资料">
                 <Ico name="globe.svg" />
-                联网补充
+                <span className="qh-web-copy">
+                  <strong>联网搜索</strong>
+                  <small>{webSearch ? "开 · 回答时可查网页" : "关 · 仅用本地知识"}</small>
+                </span>
                 <input type="checkbox" checked={webSearch} onChange={(event) => setWebSearch(event.target.checked)} />
-                <span className={webSearch ? "on" : ""} />
+                <span className={`qh-web-switch${webSearch ? " on" : ""}`} />
               </label>
             </div>
             {images.length > 0 ? (

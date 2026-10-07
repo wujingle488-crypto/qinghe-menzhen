@@ -116,6 +116,15 @@ public class HealthProfileService {
                 .orElse("");
     }
 
+    public String displayName(Long userId, Long profileId) {
+        if (profileId == null || userId == null) {
+            return "";
+        }
+        return profiles.findByIdAndUserId(profileId, userId)
+                .map(row -> row.getDisplayName() == null ? "" : row.getDisplayName().trim())
+                .orElse("");
+    }
+
     /** 问诊结束后只回写本次关联的那张卡。 */
     @Transactional
     public Map<String, Object> updateAfterConsult(Long userId, Long profileId, String dialogue) {

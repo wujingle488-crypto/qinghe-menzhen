@@ -1,6 +1,5 @@
 package com.commerce.cs.domain.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -27,21 +26,21 @@ class ConsultIntakeTest {
         ConsultIntake.Slots slots = ConsultIntake.read("今天天气怎么样", diseases, symptoms);
         assertFalse(slots.site());
         assertFalse(slots.duration());
-        assertTrue(ConsultIntake.isCasualChat("今天天气怎么样", slots));
-        assertTrue(ConsultIntake.casualGuideReply("今天天气怎么样").contains("哪里不舒服"));
         assertTrue(ConsultIntake.question(slots, 0, "").contains("哪里"));
         assertNull(ConsultIntake.question(slots, ConsultIntake.MAX_ASKS, ""));
     }
 
     @Test
-    void greetingIsCasualAndSymptomStartsConsult() {
+    void symptomSlotsStillDriveFollowUp() {
         ConsultIntake.Slots empty = ConsultIntake.read("", diseases, symptoms);
-        assertTrue(ConsultIntake.isCasualChat("你好", empty));
-        assertTrue(ConsultIntake.isCasualChat("在吗", empty));
-        assertFalse(ConsultIntake.isCasualChat("喉咙痛两天", empty));
-        assertFalse(ConsultIntake.isCasualChat("有点不舒服", empty));
+        assertFalse(empty.site());
+        ConsultIntake.Slots cold = ConsultIntake.read("喉咙痛两天", diseases, symptoms);
+        assertTrue(cold.site());
+        assertTrue(cold.duration());
         ConsultIntake.Slots afterSite = ConsultIntake.read("喉咙痛", diseases, symptoms);
-        assertFalse(ConsultIntake.isCasualChat("嗯", afterSite));
+        assertTrue(afterSite.site());
+        assertTrue(ConsultIntake.question(afterSite, 0, "URI").contains("多久")
+                || ConsultIntake.question(afterSite, 0, "URI").contains("烧"));
     }
 
     @Test

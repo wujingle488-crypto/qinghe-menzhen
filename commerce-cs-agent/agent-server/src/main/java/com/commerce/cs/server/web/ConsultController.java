@@ -198,6 +198,8 @@ public class ConsultController {
             payload.put("card", result.card());
             payload.put("taskId", result.taskId());
             payload.put("taskStatus", result.taskStatus());
+            payload.put("webSearch", result.webSearch());
+            payload.put("webHits", result.webHits());
             emitter.send(SseEmitter.event().name("result").data(payload));
             emitter.complete();
         } catch (Exception ex) {

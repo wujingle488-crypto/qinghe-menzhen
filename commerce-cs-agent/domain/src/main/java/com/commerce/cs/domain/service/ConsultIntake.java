@@ -16,16 +16,6 @@ public final class ConsultIntake {
             "低烧", "高烧", "低热", "高热", "发烧", "发热", "体温", "没烧");
     private static final List<String> STOP = List.of(
             "先给分析", "直接分析", "不用问了", "别问了", "给我分析", "直接给分析");
-    private static final List<String> GREETING = List.of(
-            "你好", "您好", "在吗", "嗨", "哈喽", "hello", "hi", "早上好", "下午好", "晚上好", "晚安",
-            "谢谢", "多谢", "再见", "拜拜");
-    private static final List<String> CHITCHAT = List.of(
-            "天气", "聊天", "无聊", "讲个笑话", "你是谁", "你叫什么", "你会什么", "在干嘛");
-    private static final List<String> CONSULT_CUES = List.of(
-            "不舒服", "难受", "疼", "痛", "痒", "咳", "烧", "热", "鼻涕", "喷嚏", "恶心", "呕吐",
-            "拉肚子", "腹泻", "便秘", "疹", "疱", "风团", "乏力", "酸痛", "喉咙", "嗓子", "肚子",
-            "皮肤", "胸口", "胸闷", "头晕", "体检", "报告", "用药", "吃什么药", "能不能吃", "挂什么科",
-            "医院", "过敏", "鼻炎", "感冒", "发烧", "发热");
 
     private static final List<String> BODY_PARTS = List.of(
             "喉咙", "嗓子", "咽", "鼻", "头", "眼", "耳", "牙", "口腔", "嘴", "脖子", "颈", "胸", "肚子", "胃",
@@ -72,50 +62,6 @@ public final class ConsultIntake {
         }
         String normalized = text.replace(" ", "").replace("\n", "");
         return STOP.stream().anyMatch(normalized::contains);
-    }
-
-    /**
-     * 普通寒暄/闲聊：还没有进入症状采集时，先正常聊天并引导，不硬追问槽位。
-     * 一旦历史里已有部位/时长/发烧信号，就按问诊处理。
-     */
-    public static boolean isCasualChat(String current, Slots historySlots) {
-        if (current == null || current.isBlank()) {
-            return false;
-        }
-        if (stopRequested(current)) {
-            return false;
-        }
-        if (historySlots != null && (historySlots.site() || historySlots.duration() || historySlots.fever())) {
-            return false;
-        }
-        String text = current.replace(" ", "").replace("\n", "").toLowerCase();
-        if (CONSULT_CUES.stream().anyMatch(text::contains)) {
-            return false;
-        }
-        if (DURATION.matcher(text).find() || FEVER.stream().anyMatch(text::contains)) {
-            return false;
-        }
-        if (text.contains("我是谁") || text.contains("我叫什么")) {
-            return false;
-        }
-        if (GREETING.stream().anyMatch(text::contains) || CHITCHAT.stream().anyMatch(text::contains)) {
-            return true;
-        }
-        return text.length() <= 12;
-    }
-
-    public static String casualGuideReply(String current) {
-        String hello = current != null && (current.contains("谢谢") || current.contains("多谢"))
-                ? "不客气～"
-                : "你好呀！我是青禾，你的门诊助手。";
-        return hello + "\n\n"
-                + "有什么我可以帮你的吗？身体不舒服、用药能不能吃、想了解常见病注意事项，都可以跟我说。\n\n"
-                + "也可以直接告诉我，例如：\n"
-                + "- 最近哪里不舒服，想了解一下怎么回事\n"
-                + "- 想查查某个药能不能吃、怎么吃\n"
-                + "- 喉咙痛、低烧、起风团这类症状持续了多久\n\n"
-                + "你尽管说。胸痛、大出血、叫不醒请直接去急诊。\n\n"
-                + "*教学参考，不是确诊，也不是处方。*";
     }
 
     public static Slots read(String history, List<MedDisease> diseases, List<MedSymptom> symptoms) {

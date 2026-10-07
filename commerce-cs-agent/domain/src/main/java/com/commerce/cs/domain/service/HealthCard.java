@@ -188,19 +188,33 @@ public final class HealthCard {
                 + "家族史：" + display(card.get("family_history"));
     }
 
-    /** 给用户看的问诊辅助摘要：只说有没有登记，不展示原始数值和病名。 */
+    /**
+     * 给用户看的问诊辅助摘要。
+     * 基本情况展示年龄段、性别、身高、体重、BMI（体型对症状评估有参考价值）；
+     * 既往/用药/过敏仍只说有没有登记，不展示病名与药名。
+     */
     public static List<Map<String, String>> consultDigest(Map<String, Object> card) {
         List<Map<String, String>> items = new ArrayList<>();
         Integer age = ageYears(card);
         String gender = str(card.get("gender"));
-        String basic;
-        if (age == null && !filled(gender)) {
-            basic = "未登记";
-        } else {
-            String band = age == null ? "" : ("成人".equals(ageBand(age)) ? "成年人" : ageBand(age));
-            basic = band.isEmpty() ? gender : (filled(gender) ? band + " · " + gender : band);
+        List<String> basicParts = new ArrayList<>();
+        if (age != null) {
+            basicParts.add("成人".equals(ageBand(age)) ? "成年人" : ageBand(age));
         }
-        items.add(item("基本情况", basic));
+        if (filled(gender)) {
+            basicParts.add(gender);
+        }
+        if (filled(card.get("height_cm"))) {
+            basicParts.add("身高" + str(card.get("height_cm")) + "cm");
+        }
+        if (filled(card.get("weight_kg"))) {
+            basicParts.add("体重" + str(card.get("weight_kg")) + "kg");
+        }
+        Double bmi = bmi(card);
+        if (bmi != null) {
+            basicParts.add("BMI " + bmi + "（" + bmiClass(bmi) + "）");
+        }
+        items.add(item("基本情况", basicParts.isEmpty() ? "未登记" : String.join(" · ", basicParts)));
         items.add(item("既往情况", presence(card.get("chronic"), "有已登记的慢性病史", "无已登记慢性病")));
         items.add(item("用药信息", presence(card.get("medications"), "存在已登记药物", "无已登记长期用药")));
         items.add(item("过敏信息", presence(card.get("allergies"), "有已登记过敏史", "无已登记过敏")));
@@ -213,7 +227,12 @@ public final class HealthCard {
     /** 已登记内容涉及哪些类别，用于「已包含：基本情况 · 既往记录 · 用药信息」。 */
     public static List<String> consultIncluded(Map<String, Object> card) {
         List<String> included = new ArrayList<>();
-        if (ageYears(card) != null || filled(card.get("gender"))) included.add("基本情况");
+        if (ageYears(card) != null
+                || filled(card.get("gender"))
+                || filled(card.get("height_cm"))
+                || filled(card.get("weight_kg"))) {
+            included.add("基本情况");
+        }
         if (filled(card.get("chronic")) || filled(card.get("surgery_history"))) included.add("既往记录");
         if (filled(card.get("medications"))) included.add("用药信息");
         if (filled(card.get("allergies"))) included.add("过敏信息");
@@ -244,6 +263,10 @@ public final class HealthCard {
         }
         appendFact(facts, "身高cm", card.get("height_cm"), "");
         appendFact(facts, "体重kg", card.get("weight_kg"), "");
+        Double bmi = bmi(card);
+        if (bmi != null) {
+            facts.append("BMI：").append(bmi).append("（").append(bmiClass(bmi)).append("）\n");
+        }
         appendFact(facts, "慢性病史", card.get("chronic"), "无");
         appendFact(facts, "手术/住院史", card.get("surgery_history"), "无");
         appendFact(facts, "长期用药", card.get("medications"), "无");
@@ -255,8 +278,9 @@ public final class HealthCard {
             return "";
         }
         return "[就诊卡]\n" + facts
-                + "使用规则：这是用户本次关联的就诊卡。用户问自己是谁、自己的身高体重、过敏、用药或其它卡片资料时，按上面直接回答，不要说不知道，也不要说这不是身份。"
-                + "卡片上没有的不要编。用户没问这些时，不要主动把整张卡念一遍。"
+                + "使用规则：这是用户本次主动关联的就诊卡，上面的字段就是已登记资料。"
+                + "用户问「我」的资料，或用本卡姓名（第三人称）问身高、体重、BMI、年龄、过敏、用药、慢病等，都必须按上面直接回答，不要说材料里没有，也不要说不知道。"
+                + "卡片上没有的字段才可以说未登记。用户没问这些时，不要主动把整张卡念一遍。"
                 + "和这次症状描述冲突时先问清楚；不能只凭既往病史下结论；过敏药不得出现在建议里。";
     }
 

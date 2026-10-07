@@ -36,9 +36,9 @@ public class ConsultOrchestrator {
     }
 
     public record TurnResult(String reply, List<Step> steps, boolean waitingHuman, Map<String, Object> card,
-                             Long taskId, String taskStatus) {
+                             Long taskId, String taskStatus, boolean webSearch, int webHits) {
         public TurnResult(String reply, List<Step> steps, boolean waitingHuman, Map<String, Object> card) {
-            this(reply, steps, waitingHuman, card, null, null);
+            this(reply, steps, waitingHuman, card, null, null, false, 0);
         }
     }
 
@@ -158,8 +158,9 @@ public class ConsultOrchestrator {
                     .orElseThrow(() -> new IllegalStateException("问诊图缺少 turn 结果"));
             ConsultTask latest = taskStore.require(done.taskId);
             boolean waiting = latest.getStatus() == ConsultTaskStatus.WAITING_USER;
+            int webHits = done.webHits == null ? 0 : done.webHits.size();
             return new TurnResult(done.reply, normalizeSteps(done.steps), waiting, done.card,
-                    latest.getId(), latest.getStatus().name());
+                    latest.getId(), latest.getStatus().name(), done.webSearch, webHits);
         } catch (RuntimeException ex) {
             taskStore.markInterrupted(turn.taskId);
             support.trace(sessionId, "任务", "中断", content,

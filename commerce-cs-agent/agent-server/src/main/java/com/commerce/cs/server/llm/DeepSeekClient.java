@@ -2,7 +2,11 @@ package com.commerce.cs.server.llm;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.Duration;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +47,9 @@ public class DeepSeekClient {
                     .header("Authorization", "Bearer " + properties.getApiKey())
                     .body(new ChatRequest(
                             properties.getModel(),
-                            List.of(new ChatMessage("system", systemPrompt), new ChatMessage("user", userPrompt)),
+                            List.of(
+                                    new ChatMessage("system", withClock(systemPrompt)),
+                                    new ChatMessage("user", userPrompt == null ? "" : userPrompt)),
                             0.2))
                     .retrieve()
                     .body(ChatResponse.class);
@@ -92,6 +98,16 @@ public class DeepSeekClient {
             LOG.warn("图片观察失败: {}", ex.getMessage());
             return "";
         }
+    }
+
+    /** 所有对话统一带上真实系统时间，避免模型把「今天」编成错误日期。 */
+    static String withClock(String systemPrompt) {
+        String base = systemPrompt == null ? "" : systemPrompt.trim();
+        String now = ZonedDateTime.now(ZoneId.of("Asia/Shanghai"))
+                .format(DateTimeFormatter.ofPattern("yyyy年M月d日 EEEE HH:mm", Locale.CHINA));
+        String clock = "【系统时钟】当前时间（Asia/Shanghai）：" + now
+                + "。涉及「今天 / 现在 / 本周 / 星期几」必须以此时钟为准，禁止编造其它日期。";
+        return base.isBlank() ? clock : base + "\n\n" + clock;
     }
 
     private String trimSlash(String url) {

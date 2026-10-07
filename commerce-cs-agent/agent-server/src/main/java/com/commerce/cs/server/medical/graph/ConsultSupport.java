@@ -200,6 +200,11 @@ public class ConsultSupport {
 
     public String brief(SessionMemory memory, UserMemoryService.View longTerm, Long buyerId) {
         StringBuilder text = new StringBuilder();
+        // 就诊卡放最前，避免模型只把知识库/联网当「材料」而忽略本卡资料。
+        String profile = profileContext(memory, buyerId);
+        if (!profile.isBlank()) {
+            text.append(profile).append("\n");
+        }
         if (!memory.shortTermText().isBlank()) {
             text.append("近期对话：\n").append(memory.shortTermText()).append("\n");
         }
@@ -219,10 +224,6 @@ public class ConsultSupport {
                 text.append("；");
             }
             text.append("\n");
-        }
-        String profile = profileContext(memory, buyerId);
-        if (!profile.isBlank()) {
-            text.append(profile).append("\n");
         }
         return text.toString().trim();
     }
@@ -244,8 +245,14 @@ public class ConsultSupport {
         return channel.contains("关键词") || channel.contains("图谱");
     }
 
-    /** 关联了就诊卡时，用户如果在问自己是谁或卡片上的资料，就直接按卡片回答。 */
+    /**
+     * 关联了就诊卡时：用户问「我」的资料，或用本卡姓名问身高/体重等，都按卡片直接答。
+     */
     public boolean askingAboutSelf(String text) {
+        return askingAboutSelf(text, null, null);
+    }
+
+    public boolean askingAboutSelf(String text, SessionMemory memory, Long buyerId) {
         if (text == null || text.isBlank()) {
             return false;
         }
@@ -253,16 +260,32 @@ public class ConsultSupport {
         if (compact.contains("我是谁") || compact.contains("我叫什么")) {
             return true;
         }
-        if (!llm.available()) {
-            return false;
+        String linkedName = "";
+        if (memory != null && memory.profileLinked && memory.profileId != null && buyerId != null) {
+            linkedName = healthProfiles.displayName(buyerId, memory.profileId);
+            if (!linkedName.isBlank() && compact.contains(linkedName.replace(" ", ""))
+                    && (compact.contains("体重") || compact.contains("身高") || compact.contains("bmi")
+                    || compact.contains("BMI") || compact.contains("多大") || compact.contains("多重")
+                    || compact.contains("年龄") || compact.contains("过敏") || compact.contains("用药")
+                    || compact.contains("谁") || compact.contains("叫什么"))) {
+                return true;
+            }
         }
+        if (!llm.available()) {
+            return !linkedName.isBlank() && compact.contains(linkedName.replace(" ", ""));
+        }
+        String nameHint = linkedName.isBlank()
+                ? ""
+                : "\n本次已关联就诊卡姓名：" + linkedName
+                + "。用户用这个姓名提问（例如问该人多重、多大、过敏），也算在问本卡资料，输出 YES。";
         String decision = llm.chat("""
-                用户是否在问自己的身份，或自己就诊卡上的资料（是谁、年龄、性别、身高、体重、过敏、用药、慢病）。
-                如果在区分「我是谁」和「你是谁」，要的是自己，输出 YES。只有单独问助手是谁才输出 NO。
+                用户是否在问本次关联就诊卡上的人的资料（是谁、年龄、性别、身高、体重、BMI、过敏、用药、慢病）。
+                问「我」的资料算 YES；用本卡姓名的第三人称提问也算 YES。
+                如果在区分「我是谁」和「你是谁」，要的是卡上的人/自己，输出 YES。只有单独问助手是谁才输出 NO。
                 只输出 YES 或 NO。
-                """, text.trim());
+                """ + nameHint, text.trim());
         if (decision == null || decision.isBlank()) {
-            return false;
+            return !linkedName.isBlank() && compact.contains(linkedName.replace(" ", ""));
         }
         String token = decision.trim().toUpperCase();
         if (token.startsWith("NO") || token.startsWith("否")) {
@@ -273,22 +296,25 @@ public class ConsultSupport {
 
     /**
      * 槽位没齐时，由模型判断这次是该直接回答，还是继续追问症状。
-     * 模型不可用时返回 false，沿用规则追问。
+     * 模型不可用且尚未采到任何症状槽位时，默认直接回答，避免硬编码寒暄词表。
      */
     public boolean answerNow(String history, ConsultIntake.Slots slots, String memoryContext) {
-        if (!llm.available() || slots == null || slots.complete() || history == null || history.isBlank()) {
+        if (slots == null || slots.complete() || history == null || history.isBlank()) {
             return false;
+        }
+        if (!llm.available()) {
+            return !slots.site() && !slots.duration() && !slots.fever();
         }
         String decision = llm.chat("""
                 你在决定这一轮要不要直接回答用户。
-                用户如果是在问一个可以靠资料或你自己的知识回答的问题（比如某种药怎么用、能不能用、有什么作用），输出 YES。
-                用户如果是在描述自己的不适，而这些情况还没说清，输出 NO，后面会再追问。
-                只输出 YES 或 NO。
+                输出 YES：用户这句话不是在补充自己的症状信息（包括寒暄、闲聊、知识问答、写代码、查资料、问用药、问本人资料等任何可直接答完的话）。
+                输出 NO：仅当用户正在描述或补充自己当前的不适/症状，且部位、时长或是否发烧等关键信息还没说清、需要继续问诊追问。
+                拿不准时输出 YES。只输出 YES 或 NO。
                 """, "用户原话：\n" + history
                 + "\n还没提到：" + slots.missingText()
                 + (memoryContext == null || memoryContext.isBlank() ? "" : "\n" + memoryContext));
         if (decision == null || decision.isBlank()) {
-            return false;
+            return !slots.site() && !slots.duration() && !slots.fever();
         }
         String token = decision.trim().toUpperCase();
         if (token.startsWith("NO") || token.startsWith("否")) {
@@ -298,37 +324,42 @@ public class ConsultSupport {
     }
 
     /**
-     * 直接回答这一问。资料够就用知识库和联网结果，不够就用模型自己的知识。
-     * 不规定段落提纲，也不在这里写死任何药品的服法。
+     * 直接回答这一问（寒暄、闲聊、知识问答都走这里）。
+     * 资料够就用知识库和联网结果，不够就用模型自己的知识；像正常助手对话，不套问诊菜单。
      */
     public String directAnswer(String history, String knowledge, String web, String memoryContext) {
         if (!llm.available()) {
             return "";
         }
         String material = "";
-        if (knowledge != null && !knowledge.isBlank()) {
-            material += "\n知识库片段：\n" + knowledge;
-        }
         if (web != null && !web.isBlank()) {
-            material += "\n联网资料：\n" + web;
+            material += "\n【已检索到的联网资料，必须优先采用；其中的气温、天气、网页摘要都算有效来源】\n" + web;
         }
+        if (knowledge != null && !knowledge.isBlank()) {
+            material += "\n知识库片段（仅当与用户问题同类时参考，不要用它否定联网资料）：\n" + knowledge;
+        }
+        String context = memoryContext == null ? "" : memoryContext.trim();
+        boolean hasCard = context.contains("[就诊卡]");
         String drafted = llm.chat("""
-                你是教学用门诊助手，不是医生。请直接回答用户这次的问题。
-                先用下面的知识库片段和联网资料；不够的部分用你自己的知识补上，把问题答完。
-                不要改去追问症状，也不要用「去看说明书」代替回答。
-                材料里如果有就诊卡，用户问自己是谁或自己的资料时，按卡片回答，不要说不知道。
-                不要提及知识库有没有覆盖，不要说这是你自己的常识。
-                不要推荐抗生素或处方抗病毒药，不要说已经确诊，不要开处方。
+                你是青禾，一个能自然对话的助手，也可以协助门诊相关问题；你不是医生。
+                核心要求：直接完成用户这次提出的请求，把问题答完或把事情做完。
+                不要把话题扭成问诊采集，不要反问身体哪里不舒服，不要贴「你可以这样问我」的示例菜单。
+                若下方出现 [就诊卡] 区块，那就是本次已关联就诊卡的登记资料，优先于知识库和联网结果。
+                用户问「我」或用该卡姓名问身高、体重、BMI、年龄、过敏、用药等，必须按 [就诊卡] 回答；卡片上有的字段不得说「材料里没有」或「不知道」。
+                先看就诊卡，再用知识库片段和联网资料；仍不够时用你自己的知识补上。
+                联网资料里若有「公开网页」或带 °C/℃ 的条目，气温必须只用那一条，同一会话里同一地点不要换数字。
+                其它网页只作背景，不要用景区、疾病科普里的数字当气温。
+                没有这些实时条目时才可以说没检索到，不要编造具体数值。
+                仅当用户明确在谈健康/用药建议时：不要推荐抗生素或处方抗病毒药，不要说已经确诊，不要开处方；可加一句教学参考免责。
+                纯查卡上数字或非医疗请求不要加医疗免责，也不要追问症状。
                 用 Markdown，结构按这个问题本身来，不要套固定提纲。
-                """, scopedUser(history) + material
-                + (memoryContext == null || memoryContext.isBlank() ? "" : "\n" + memoryContext));
+                """, (hasCard ? context + "\n\n" : "")
+                + scopedUser(history) + material
+                + (!hasCard && !context.isBlank() ? "\n" + context : ""));
         if (drafted == null || drafted.isBlank()) {
             return "";
         }
         drafted = stripCoverageNotice(drafted);
-        if (!drafted.contains("教学参考")) {
-            drafted = drafted.trim() + "\n\n*" + DISCLAIMER + "*";
-        }
         return ensureMarkdown(drafted);
     }
 
@@ -625,9 +656,30 @@ public class ConsultSupport {
         }
     }
 
+    /** 短追问（如「今天天气如何」）拼上最近一句用户话再去联网，避免丢掉地点。 */
+    public String webQuery(ConsultTurn turn) {
+        String current = turn == null || turn.content == null ? "" : turn.content.trim();
+        String history = turn == null || turn.history == null ? "" : turn.history.trim();
+        if (current.isBlank()) {
+            return history;
+        }
+        String compact = current.replace(" ", "").replace("\n", "");
+        if (compact.length() > 12 || history.isBlank()) {
+            return current;
+        }
+        String prev = "";
+        for (String line : history.split("\n")) {
+            String item = line.trim();
+            if (!item.isBlank() && !item.equals(current)) {
+                prev = item;
+            }
+        }
+        return prev.isBlank() ? current : prev + " " + current;
+    }
+
     public List<Map<String, Object>> evidenceViews(ConsultTurn turn) {
         List<Map<String, Object>> views = new ArrayList<>();
-        if (turn.bundle != null && turn.bundle.hits() != null) {
+        if (!turn.directAnswer && turn.bundle != null && turn.bundle.hits() != null) {
             for (RagFacade.Hit hit : turn.bundle.hits()) {
                 if (views.size() >= 3) {
                     break;
@@ -636,7 +688,11 @@ public class ConsultSupport {
             }
         }
         if (turn.webHits != null) {
+            String query = webQuery(turn);
             for (RagFacade.Hit hit : turn.webHits) {
+                if (turn.directAnswer && !citeWorthy(hit, query)) {
+                    continue;
+                }
                 if (views.size() >= 5) {
                     break;
                 }
@@ -644,6 +700,28 @@ public class ConsultSupport {
             }
         }
         return views;
+    }
+
+    private static boolean citeWorthy(RagFacade.Hit hit, String query) {
+        if (hit == null) {
+            return false;
+        }
+        String channel = hit.channel() == null ? "" : hit.channel();
+        String hay = ((hit.title() == null ? "" : hit.title()) + " " + (hit.text() == null ? "" : hit.text()));
+        if ("公开网页".equals(channel) || hay.contains("°C") || hay.contains("℃") || hay.contains("气温")) {
+            return true;
+        }
+        if (query == null || query.isBlank()) {
+            return false;
+        }
+        String hayNorm = hay.replace(" ", "");
+        String q = query.replaceAll("(?i)(今天|现在|目前|如何|怎样|怎么样|什么|多少|的|了|吗|呢|啊|请|帮我)", "");
+        for (String token : q.split("[\\s，,。？?！!]+")) {
+            if (token.length() >= 2 && hayNorm.contains(token)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void finish(ConsultTurn turn, String agent, String action, String output, Boolean passed) {

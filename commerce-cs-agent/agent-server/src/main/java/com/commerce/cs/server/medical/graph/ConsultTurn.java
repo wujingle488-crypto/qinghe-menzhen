@@ -41,6 +41,8 @@ public final class ConsultTurn {
     public boolean webSearch;
     /** 模型判断这次可以直接回答，不按症状槽位追问，也不据此下诊断。 */
     public boolean directAnswer;
+    /** 这一轮的追问或收口是模型根据原话推断的，不再用词表缺口给回答加「还没说到」。 */
+    public boolean intakeByModel;
     /** 用户在问自己或就诊卡上的资料。 */
     public boolean aboutSelf;
     /** 本条消息是否带着已关联的就诊卡；null 表示沿用会话里记下的状态（例如断点恢复）。 */

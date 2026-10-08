@@ -295,32 +295,51 @@ public class ConsultSupport {
     }
 
     /**
-     * 槽位没齐时，由模型判断这次是该直接回答，还是继续追问症状。
-     * 模型不可用且尚未采到任何症状槽位时，默认直接回答，避免硬编码寒暄词表。
+     * 模型根据整段原话决定这一轮是回答还是追问。
+     * 不把词表算出的「还缺部位/时长」交给模型，避免「全身都疼」被当成没说部位。
      */
-    public boolean answerNow(String history, ConsultIntake.Slots slots, String memoryContext) {
-        if (slots == null || slots.complete() || history == null || history.isBlank()) {
-            return false;
-        }
-        if (!llm.available()) {
-            return !slots.site() && !slots.duration() && !slots.fever();
+    public IntakePlan planIntake(String history, String memoryContext, int asked) {
+        if (!llm.available() || history == null || history.isBlank()) {
+            return IntakePlan.answer();
         }
         String decision = llm.chat("""
-                你在决定这一轮要不要直接回答用户。
-                输出 YES：用户这句话不是在补充自己的症状信息（包括寒暄、闲聊、知识问答、写代码、查资料、问用药、问本人资料等任何可直接答完的话）。
-                输出 NO：仅当用户正在描述或补充自己当前的不适/症状，且部位、时长或是否发烧等关键信息还没说清、需要继续问诊追问。
-                拿不准时输出 YES。只输出 YES 或 NO。
-                """, "用户原话：\n" + history
-                + "\n还没提到：" + slots.missingText()
+                你在阅读用户原话，自己推断已经表达了什么，以及这一轮该直接回答，还是只追问一句。
+                按语义推断，不要对照固定部位名单、固定时长格式或固定问句。
+                不适范围可以是某个部位，也可以是全身、到处、所有部位，或任何你能从原话推断出的范围；病程和发热同样按意思认。
+                已经说过的不要换个说法再问一遍，也不要重复近期对话里已经问过的那一句。
+                体温、持续时间等数字明显超出常理时，选择直接回答，在回答里说明这个读数不合理，不要改去追问别的项目。
+                寒暄、闲聊、查资料、写代码等不是在补充不适，直接回答。
+                只有用户正在说自己的不适、你推断还缺一个会改变判断的信息、而且追问次数还少，才追问一句新的、具体的问题。
+                拿不准就直接回答。
+                只输出：
+                第一行只能是 ANSWER 或 ASK。
+                若是 ASK，第二行只写那一句口语追问，不要分析、不要药品名、不要标题和列表。
+                """, "已追问次数：" + Math.max(asked, 0) + "\n用户原话：\n" + history
                 + (memoryContext == null || memoryContext.isBlank() ? "" : "\n" + memoryContext));
+        return parseIntake(decision);
+    }
+
+    static IntakePlan parseIntake(String decision) {
         if (decision == null || decision.isBlank()) {
-            return !slots.site() && !slots.duration() && !slots.fever();
+            return IntakePlan.answer();
         }
-        String token = decision.trim().toUpperCase();
-        if (token.startsWith("NO") || token.startsWith("否")) {
-            return false;
+        String[] lines = decision.trim().split("\\R", 2);
+        String head = lines[0].trim().toUpperCase();
+        if (head.startsWith("ASK") || head.startsWith("追问")) {
+            String question = lines.length < 2 ? "" : lines[1].trim();
+            question = question.replaceAll("(?m)^[#>*\\-\\d\\.\\s]+", "").trim();
+            if (question.isBlank() || question.length() > 220 || question.contains("##")) {
+                return IntakePlan.answer();
+            }
+            return new IntakePlan(true, question);
         }
-        return token.startsWith("YES") || token.startsWith("是");
+        return IntakePlan.answer();
+    }
+
+    public record IntakePlan(boolean ask, String question) {
+        public static IntakePlan answer() {
+            return new IntakePlan(false, "");
+        }
     }
 
     /**
@@ -350,6 +369,7 @@ public class ConsultSupport {
                 联网资料里若有「公开网页」或带 °C/℃ 的条目，气温必须只用那一条，同一会话里同一地点不要换数字。
                 其它网页只作背景，不要用景区、疾病科普里的数字当气温。
                 没有这些实时条目时才可以说没检索到，不要编造具体数值。
+                用户是在描述身体情况时：按原话理解范围、病程和体温，已经说过的不要再追问；数值明显不合理要直接说明。
                 仅当用户明确在谈健康/用药建议时：不要推荐抗生素或处方抗病毒药，不要说已经确诊，不要开处方；可加一句教学参考免责。
                 纯查卡上数字或非医疗请求不要加医疗免责，也不要追问症状。
                 用 Markdown，结构按这个问题本身来，不要套固定提纲。

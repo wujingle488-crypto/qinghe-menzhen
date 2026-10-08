@@ -143,16 +143,45 @@ public class ConsultWorkflow {
             support.checkpoint(turn, NODE_INTAKE_AGENT);
             return Map.of(KEY_TURN, turn);
         }
-        // 统一原则：还没采到任何症状槽位时，整轮都走 LLM 直接答，绝不进规则追问。
-        // 只有已经进入症状采集（槽位有信号但未齐）时，才由模型决定继续追问还是直接答。
+        // 模型在线时，下一句只由它根据原话推断，不把词表算出的部位/时长/发热写进记忆，也不用固定问句。
+        // 追问次数用尽就让模型直接回答。词表问句只在没有密钥时降级。红旗和药品白名单仍在后面的固定节点。
+        if (support.llm().available() && !ConsultIntake.stopRequested(turn.content)) {
+            String context = support.profileContext(turn.memory, turn.session.getBuyerId());
+            String recent = turn.memory.shortTermText();
+            if (!recent.isBlank()) {
+                context = context.isBlank() ? "近期对话：\n" + recent : context + "\n近期对话：\n" + recent;
+            }
+            ConsultSupport.IntakePlan plan = asked >= ConsultIntake.MAX_ASKS
+                    ? ConsultSupport.IntakePlan.answer()
+                    : support.planIntake(turn.history, context, asked);
+            turn.intakeByModel = true;
+            if (plan.ask()) {
+                turn.memory.missing = "";
+                turn.memory.ask(plan.question());
+                turn.memory.pushTurn("助手", plan.question());
+                turn.reply = plan.question();
+                turn.card = null;
+                turn.steps.add(new Step("progress", "先补一个问题"));
+                turn.route = ConsultTurn.ROUTE_ASK;
+            } else {
+                // 模型认为可以回答、但词表没凑齐时，按原话说明，不再贴「还缺部位」。
+                // 词表已经齐的病例仍走检索和药品白名单。
+                if (!turn.slots.complete()) {
+                    turn.directAnswer = true;
+                    turn.steps.add(new Step("progress",
+                            turn.webSearch ? "由模型回答（可联网）" : "由模型根据原话回答"));
+                }
+                turn.route = ConsultTurn.ROUTE_READY;
+            }
+            support.checkpoint(turn, NODE_INTAKE_AGENT);
+            return Map.of(KEY_TURN, turn);
+        }
         boolean inSymptomIntake = turn.slots.site() || turn.slots.duration() || turn.slots.fever();
         if (!ConsultIntake.stopRequested(turn.content) && asked < ConsultIntake.MAX_ASKS && !turn.slots.complete()
-                && (!inSymptomIntake || support.answerNow(turn.history, turn.slots,
-                support.profileContext(turn.memory, turn.session.getBuyerId())))) {
+                && !inSymptomIntake) {
             turn.directAnswer = true;
             turn.route = ConsultTurn.ROUTE_READY;
-            turn.steps.add(new Step("progress",
-                    turn.webSearch ? "由模型回答（可联网）" : "由模型直接回答"));
+            turn.steps.add(new Step("progress", "由规则直接回答"));
             support.checkpoint(turn, NODE_INTAKE_AGENT);
             return Map.of(KEY_TURN, turn);
         }
@@ -297,7 +326,9 @@ public class ConsultWorkflow {
             turn.reply = general.isBlank()
                     ? "这次没有整理出回答。\n\n*" + ConsultSupport.DISCLAIMER + "*"
                     : general;
-            turn.reply = support.withUncertainty(turn.reply, turn.slots);
+            if (!turn.intakeByModel) {
+                turn.reply = support.withUncertainty(turn.reply, turn.slots);
+            }
             turn.proposed = List.of();
             turn.llmUsed = !general.isBlank();
             support.checkpoint(turn, NODE_ADVICE);
@@ -322,7 +353,9 @@ public class ConsultWorkflow {
                 }
             }
         }
-        turn.reply = support.withUncertainty(turn.reply, turn.slots);
+        if (!turn.intakeByModel) {
+            turn.reply = support.withUncertainty(turn.reply, turn.slots);
+        }
         if (!turn.reply.contains("教学参考")) {
             turn.reply = turn.reply + "\n\n*" + ConsultSupport.DISCLAIMER + "*";
         }

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -46,19 +47,23 @@ public class ConsultOrchestrator {
         return handle(sessionId, text, false);
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public TurnResult handle(Long sessionId, String text, boolean webSearch) {
         return handle(sessionId, text, webSearch, null);
     }
 
-    @Transactional
+    /**
+     * 问诊会连续调用模型和检索，不能包在一个事务里。
+     * 否则这条事务会锁住会话几十秒，下一条消息等到锁超时后变成 500。
+     */
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public TurnResult handle(Long sessionId, String text, boolean webSearch, Boolean useProfile) {
         String content = text == null ? "" : text.trim();
         return run(sessionId, content, false, null, webSearch, useProfile);
     }
 
     /** 继续未完成任务：用上次用户内容重跑图，不重复落用户消息。 */
-    @Transactional
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public TurnResult resume(Long sessionId) {
         ConsultTask task = taskStore.findResumable(sessionId)
                 .orElseThrow(() -> new IllegalArgumentException("没有可继续的问诊任务"));

@@ -17,35 +17,25 @@
 
 没有 DeepSeek 密钥时，页面和知识库仍然完整。问诊回答会走本地规则降级，而不是调用大模型。
 
-## 需要事先装好
+## 需要的软件
 
-| 软件 | 版本 |
-| --- | --- |
-| JDK | 21 |
-| Maven | 3.9 或更高 |
-| Node.js | 18 或更高 |
-| MySQL | 8 |
-| Python | 3.10 或更高 |
+| 软件 | 版本 | 缺失时 |
+| --- | --- | --- |
+| JDK | 21 | `winget` 安装 Microsoft OpenJDK 21 |
+| Maven | 3.9 或更高 | 下载到 `%LOCALAPPDATA%\QingheClinic\tools` |
+| Node.js | 18 或更高 | `winget` 安装 Node.js LTS |
+| Python | 3.10 或更高 | `winget` 安装 Python 3.12 |
+| MySQL | 8 | 下载便携版到上述 tools 目录并自动起库；失败再试 winget |
 
-`java`、`mvn`、`npm`、`python`、`mysql` 都要能在终端里直接运行。Windows 上如果装在 `D:\DevelopTools\jdk21\jdk21` 和 `D:\DevelopTools\apache-maven-3.9.11`，启动脚本会自己找到它们。
+启动脚本会检测 `java` / `mvn` / `npm` / `python` / `mysql`，没有就自动装。首次可能较久，并可能弹出 UAC（winget）。本机需能访问外网，且已有 `winget`（微软「应用安装程序」）。
 
-Neo4j 和 Elasticsearch 不是启动页面所必需的。没开时，问诊会跳过对应检索通道，页面仍可使用。
+已装好的工具会直接复用，不会重复安装。Neo4j 和 Elasticsearch 不是启动页面所必需的。
 
 ## 让别人或 AI 直接启动
 
 在仓库根目录执行。
 
-### 1. 准备数据库
-
-用 MySQL 的 root 账号执行一次：
-
-```bash
-mysql -u root -p < scripts/init-mysql.sql
-```
-
-这会创建数据库 `commerce_cs`，以及只能访问这个库的账号 `commerce` / `commerce_cs_dev`。
-
-### 2. 准备密钥
+### 1. 准备密钥（可选）
 
 ```bash
 copy .env.example .env
@@ -53,24 +43,46 @@ copy .env.example .env
 
 用编辑器打开 `.env`，把 `LLM_API_KEY` 写成你自己的 DeepSeek 密钥。没有密钥就留空，系统仍能启动。`.env` 不会被提交。
 
-### 3. Windows 一键启动
+若本机 MySQL 的 root 有密码，可在 `.env` 写 `MYSQL_ROOT_PASSWORD=你的密码`，脚本会用来自动建库。便携 MySQL（脚本自动下载的那种）root 为空密码，会直接执行 `scripts/init-mysql.sql`。
+
+### 2. Windows 一键启动
+
+有两套脚本，按场景选：
+
+| 脚本 | 适用 |
+| --- | --- |
+| `一键启动-通用.bat` / `scripts/start-portable.ps1` | **推荐给别人用**。不绑定本机目录；缺啥装啥。 |
+| `一键启动.bat` / `scripts/start.ps1` | 本机专用。优先用 `D:\DevelopTools\...`，仍缺则同样自动安装。 |
+
+通用启动（任意电脑）：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/start-portable.ps1
+```
+
+或双击根目录 `一键启动-通用.bat`。
+
+本机启动（含 DevelopTools 回退）：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts/start.ps1
 ```
 
+或双击根目录 `一键启动.bat`。
+
 脚本会依次：
 
-1. 确认 MySQL 库能连上。
-2. 在 `commerce-cs-agent/web` 执行 `npm install`（已有 `node_modules` 时跳过）。
-3. 安装 `知识库/index/requirements.txt`，并把 `知识库` 目录下的 Markdown 切块、嵌入，写入本地 Chroma。模型是 `BAAI/bge-small-zh-v1.5`，第一次会下载到本机缓存。
-4. 启动本地向量库 `127.0.0.1:8000` 和嵌入服务 `127.0.0.1:8001`。
-5. 编译并启动后端 `http://127.0.0.1:8082`。后端启动时自动把疾病、药品白名单、红旗和知识文章写入 MySQL。
-6. 启动前端 `http://127.0.0.1:5173`。
+1. 检测并自动安装缺失的 `java` / `mvn` / `npm` / `python` / `mysql`。
+2. 确认（或自动创建）MySQL 库 `commerce_cs`。
+3. 在 `commerce-cs-agent/web` 执行 `npm install`（已有 `node_modules` 时跳过）。
+4. 安装 `知识库/index/requirements.txt`，并把 `知识库` 目录下的 Markdown 切块、嵌入，写入本地 Chroma。模型是 `BAAI/bge-small-zh-v1.5`，第一次会下载到本机缓存。
+5. 启动本地向量库 `127.0.0.1:8000` 和嵌入服务 `127.0.0.1:8001`。
+6. 编译并启动后端 `http://127.0.0.1:8082`。后端启动时自动把疾病、药品白名单、红旗和知识文章写入 MySQL。
+7. 启动前端 `http://127.0.0.1:5173`。
 
 浏览器打开 `http://127.0.0.1:5173`。看到登录页就说明前端和后端已经接上。注册后进入问诊，点「知识库」应能看到常见疾病、症状表现、用药指南、检查检验等分类和文章。
 
-### 4. 不用脚本时，按这个顺序自己启动
+### 3. 不用脚本时，按这个顺序自己启动
 
 以下命令的当前目录都是仓库根目录，除非另写了 `cd`。
 

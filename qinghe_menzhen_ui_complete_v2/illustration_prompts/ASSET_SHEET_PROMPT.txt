@@ -1,5 +1,0 @@
-Create a design asset sheet for the Qinghe MenZhen medical AI SaaS website.
-Show the final UI reference on the left/center and a clean labeled SVG icon sheet on the right; include the AI doctor robot mascot, botanical decoration, navigation background, color palette, and suggested project folder structure.
-Visual style: premium soft-friendly healthcare SaaS, mint/teal/white, glassy rounded cards, clean vector icons, consistent 2.5-3.5px rounded strokes.
-The sheet is a reference for developers, not a production page.
-Avoid excessive decoration and keep labels legible.

@@ -22,6 +22,22 @@ class ConsultIntakeTest {
     }
 
     @Test
+    void yearsMonthsAndWeeksCountAsDuration() {
+        assertTrue(ConsultIntake.read("头爆炸\n五十年", diseases, symptoms).duration());
+        assertTrue(ConsultIntake.read("头爆炸\n50年", diseases, symptoms).duration());
+        assertTrue(ConsultIntake.read("咳嗽三年了", diseases, symptoms).duration());
+        assertTrue(ConsultIntake.read("拉肚子两个月", diseases, symptoms).duration());
+        assertTrue(ConsultIntake.read("头痛一周", diseases, symptoms).duration());
+        assertTrue(ConsultIntake.read("嗓子疼半小时", diseases, symptoms).duration());
+        ConsultIntake.Slots answered = ConsultIntake.read("头爆炸\n五十年", diseases, symptoms);
+        assertTrue(answered.site());
+        assertTrue(ConsultIntake.question(answered, 1, "").contains("烧"));
+        assertFalse(ConsultIntake.question(answered, 1, "").contains("多久"));
+        assertFalse(ConsultIntake.read("我五十岁", diseases, symptoms).duration());
+        assertFalse(ConsultIntake.read("今年", diseases, symptoms).duration());
+    }
+
+    @Test
     void todayIsNotADurationAndWeatherHasNoSite() {
         ConsultIntake.Slots slots = ConsultIntake.read("今天天气怎么样", diseases, symptoms);
         assertFalse(slots.site());

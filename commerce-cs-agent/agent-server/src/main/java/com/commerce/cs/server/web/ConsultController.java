@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +27,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
 public class ConsultController {
+    private static final Logger LOG = LoggerFactory.getLogger(ConsultController.class);
     private final SessionService sessionService;
     private final ConsultOrchestrator consult;
     private final ChatMessageRepository messages;
@@ -203,14 +206,36 @@ public class ConsultController {
             emitter.send(SseEmitter.event().name("result").data(payload));
             emitter.complete();
         } catch (Exception ex) {
+            LOG.warn("问诊失败 session={}: {}", id, ex.toString());
             try {
                 consult.interrupt(id);
             } catch (Exception ignored) {
                 // 中断标记失败时仍把原始错误回给前端
             }
-            emitter.completeWithError(ex);
+            try {
+                emitter.send(SseEmitter.event().name("error").data(failureText(ex)));
+                emitter.complete();
+            } catch (Exception sendEx) {
+                emitter.completeWithError(ex);
+            }
         }
         return emitter;
+    }
+
+    private static String failureText(Throwable ex) {
+        Throwable current = ex;
+        while (current != null) {
+            String message = current.getMessage() == null ? "" : current.getMessage();
+            if (message.contains("Lock wait timeout")) {
+                return "上一条问诊还在处理，请等它结束再发。";
+            }
+            current = current.getCause();
+        }
+        String message = ex.getMessage() == null ? "" : ex.getMessage().trim();
+        if (message.isBlank() || message.contains("Internal Server Error")) {
+            return "这次问诊没有完成，请再发一次。";
+        }
+        return message.length() > 180 ? message.substring(0, 180) : message;
     }
 
     @FunctionalInterface

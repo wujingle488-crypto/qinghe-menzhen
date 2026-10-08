@@ -533,6 +533,9 @@ export function ConsultPage({
             return [...withoutOld, { role: "progress", text: data }];
           });
         }
+        if (eventName === "error") {
+          throw new Error(data || "这次问诊没有完成，请再发一次。");
+        }
         if (eventName === "result") {
           const body = JSON.parse(data) as {
             reply?: string;

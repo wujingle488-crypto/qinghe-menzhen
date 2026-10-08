@@ -1,4 +1,5 @@
-# Start Qinghe Clinic: check DB, build local KB index, start backend and frontend.
+# Portable start for Qinghe Clinic: no machine-specific tool paths.
+# Requires java / mvn / npm / python / mysql on PATH (or JAVA_HOME).
 $ErrorActionPreference = "Stop"
 $Root = Resolve-Path (Join-Path $PSScriptRoot "..")
 Set-Location $Root
@@ -36,17 +37,6 @@ function Find-IndexDir {
 }
 
 Import-DotEnv
-
-# Local machine shortcuts (kept for this PC).
-if (-not $env:JAVA_HOME -and (Test-Path "D:\DevelopTools\jdk21\jdk21\bin\java.exe")) {
-    $env:JAVA_HOME = "D:\DevelopTools\jdk21\jdk21"
-}
-if ($env:JAVA_HOME) {
-    $env:Path = "$env:JAVA_HOME\bin;" + $env:Path
-}
-if (-not (Get-Command mvn -ErrorAction SilentlyContinue) -and (Test-Path "D:\DevelopTools\apache-maven-3.9.11\bin\mvn.cmd")) {
-    $env:Path = "D:\DevelopTools\apache-maven-3.9.11\bin;" + $env:Path
-}
 
 . (Join-Path $PSScriptRoot "ensure-tools.ps1")
 Ensure-QingheTools

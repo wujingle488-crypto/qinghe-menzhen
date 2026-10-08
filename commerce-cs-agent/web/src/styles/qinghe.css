@@ -2346,6 +2346,45 @@
   background: #d8f7f4;
 }
 
+.qh-vc-custom-row {
+  display: flex;
+  gap: 8px;
+  padding: 6px 4px 4px;
+}
+
+.qh-vc-custom-row input {
+  flex: 1;
+  min-width: 0;
+  min-height: 36px;
+  padding: 0 10px;
+  border: 1px solid rgba(35, 211, 195, 0.35);
+  border-radius: 10px;
+  background: #f7fcfd;
+  color: #163b5c;
+  outline: none;
+}
+
+.qh-vc-custom-row input:focus {
+  border-color: #12b8a6;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(18, 184, 166, 0.08);
+}
+
+.qh-vc-custom-row button {
+  flex: 0 0 auto;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 10px;
+  background: #087c92;
+  color: #fff;
+  font-weight: 600;
+}
+
+.qh-vc-custom-row button:disabled {
+  opacity: 0.45;
+}
+
 .qh-vc-field small {
   color: #7894a6;
 }

@@ -3,7 +3,7 @@ import { Ico } from "../components/Ico";
 import { MarkdownBody } from "../components/MarkdownBody";
 import { api } from "../api";
 
-const CHRONIC_OPTIONS = ["无", "高血压", "糖尿病", "哮喘"];
+const CHRONIC_OPTIONS = ["无", "高血压", "糖尿病", "哮喘", "其他"];
 
 type CardBrief = { id: number; name: string; title: string; completeness?: number };
 type HistoryItem = { id: number; title: string; updatedAt?: string };
@@ -414,6 +414,7 @@ export function ProfilePage({
                   value={form.chronic}
                   options={CHRONIC_OPTIONS}
                   exclusiveNone="无"
+                  customOption="其他"
                   onChange={(value) => setField(setForm, "chronic", value)}
                 />
                 <SelectField icon="capsule.svg" label="长期用药" value={form.medications} options={["无", "有长期用药"]} onChange={(value) => setField(setForm, "medications", value)} />
@@ -428,6 +429,7 @@ export function ProfilePage({
                   value={form.chronic}
                   options={CHRONIC_OPTIONS}
                   exclusiveNone="无"
+                  customOption="其他"
                   wide
                   onChange={(value) => setField(setForm, "chronic", value)}
                 />
@@ -602,7 +604,7 @@ function SelectField({
 }
 
 function MultiSelectField({
-  icon, label, value, options, onChange, exclusiveNone, wide
+  icon, label, value, options, onChange, exclusiveNone, customOption, wide
 }: {
   icon: string;
   label: string;
@@ -610,20 +612,32 @@ function MultiSelectField({
   options: string[];
   onChange: (value: string) => void;
   exclusiveNone?: string;
+  /** 点「其他」后弹出输入框，把自定义内容加进已选，不把「其他」本身写入值。 */
+  customOption?: string;
   wide?: boolean;
 }) {
   const [open, setOpen] = useState(false);
+  const [customOpen, setCustomOpen] = useState(false);
+  const [customText, setCustomText] = useState("");
   const rootRef = useRef<HTMLDivElement>(null);
-  const selected = parseMulti(value);
-  const extras = selected.filter((item) => !options.includes(item));
+  const customInputRef = useRef<HTMLInputElement>(null);
+  const preset = options.filter((item) => item !== customOption);
+  const selected = parseMulti(value).filter((item) => item !== customOption);
+  const extras = selected.filter((item) => !preset.includes(item));
 
   useEffect(() => {
     if (!open) return;
     const onDoc = (event: MouseEvent) => {
-      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
+      if (!rootRef.current?.contains(event.target as Node)) {
+        setOpen(false);
+        setCustomOpen(false);
+      }
     };
     const onKey = (event: globalThis.KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Escape") {
+        setOpen(false);
+        setCustomOpen(false);
+      }
     };
     document.addEventListener("mousedown", onDoc);
     window.addEventListener("keydown", onKey);
@@ -632,6 +646,14 @@ function MultiSelectField({
       window.removeEventListener("keydown", onKey);
     };
   }, [open]);
+
+  useEffect(() => {
+    if (customOpen) customInputRef.current?.focus();
+  }, [customOpen]);
+
+  function write(next: string[]) {
+    onChange(joinMulti(next));
+  }
 
   function toggle(item: string) {
     const none = exclusiveNone;
@@ -643,7 +665,20 @@ function MultiSelectField({
     } else {
       next = [...selected.filter((entry) => entry !== none), item];
     }
-    onChange(joinMulti(next));
+    write(next);
+  }
+
+  function addCustom() {
+    const text = customText.trim().replace(/[、,，;；|/]+/g, " ").replace(/\s+/g, " ");
+    if (!text || text === exclusiveNone || text === customOption) return;
+    if (selected.includes(text)) {
+      setCustomText("");
+      setCustomOpen(false);
+      return;
+    }
+    write([...selected.filter((entry) => entry !== exclusiveNone), text]);
+    setCustomText("");
+    setCustomOpen(false);
   }
 
   const summary = selected.length === 0
@@ -659,7 +694,10 @@ function MultiSelectField({
           className="qh-vc-field-trigger"
           aria-haspopup="listbox"
           aria-expanded={open}
-          onClick={() => setOpen((prev) => !prev)}
+          onClick={() => {
+            setOpen((prev) => !prev);
+            setCustomOpen(false);
+          }}
         >
           <span className={selected.length ? "" : "placeholder"}>{summary}</span>
           <svg viewBox="0 0 16 16" aria-hidden="true">
@@ -684,7 +722,7 @@ function MultiSelectField({
         ) : null}
         {open ? (
           <div className="qh-vc-field-menu" role="listbox" aria-multiselectable="true" aria-label={label}>
-            {[...options, ...extras].map((item) => {
+            {[...preset, ...extras].map((item) => {
               const on = selected.includes(item);
               return (
                 <button
@@ -700,6 +738,39 @@ function MultiSelectField({
                 </button>
               );
             })}
+            {customOption ? (
+              <>
+                <button
+                  type="button"
+                  role="option"
+                  aria-selected={customOpen}
+                  className={customOpen ? "on check" : "check"}
+                  onClick={() => setCustomOpen((prev) => !prev)}
+                >
+                  <i className="qh-vc-check" aria-hidden="true">{customOpen ? "✓" : ""}</i>
+                  {customOption}
+                </button>
+                {customOpen ? (
+                  <div className="qh-vc-custom-row" onMouseDown={(event) => event.stopPropagation()}>
+                    <input
+                      ref={customInputRef}
+                      value={customText}
+                      placeholder="输入其他既往病史，回车添加"
+                      onChange={(event) => setCustomText(event.target.value)}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter") {
+                          event.preventDefault();
+                          addCustom();
+                        }
+                      }}
+                    />
+                    <button type="button" disabled={!customText.trim()} onClick={addCustom}>
+                      添加
+                    </button>
+                  </div>
+                ) : null}
+              </>
+            ) : null}
           </div>
         ) : null}
       </div>

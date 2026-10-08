@@ -1,7 +1,9 @@
-import { useEffect, useState, type FormEvent, type KeyboardEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
 import { Ico } from "../components/Ico";
 import { MarkdownBody } from "../components/MarkdownBody";
 import { api } from "../api";
+
+const CHRONIC_OPTIONS = ["无", "高血压", "糖尿病", "哮喘"];
 
 type CardBrief = { id: number; name: string; title: string; completeness?: number };
 type HistoryItem = { id: number; title: string; updatedAt?: string };
@@ -406,14 +408,29 @@ export function ProfilePage({
                 <Field icon="chart.svg" label="身高" required suffix="cm" value={form.height_cm} onChange={(value) => setField(setForm, "height_cm", value)} />
                 <Field icon="heart_pulse.svg" label="体重指数（BMI）" value={bmi == null ? "" : String(bmi)} readOnly />
                 <SelectField icon="shield.svg" label="过敏史" value={form.allergies} options={["无过敏", "药物过敏", "食物过敏", "其他"]} onChange={(value) => setField(setForm, "allergies", value)} />
-                <SelectField icon="medical_card.svg" label="既往病史" value={form.chronic} options={["无", "高血压", "糖尿病", "哮喘"]} onChange={(value) => setField(setForm, "chronic", value)} />
+                <MultiSelectField
+                  icon="medical_card.svg"
+                  label="既往病史"
+                  value={form.chronic}
+                  options={CHRONIC_OPTIONS}
+                  exclusiveNone="无"
+                  onChange={(value) => setField(setForm, "chronic", value)}
+                />
                 <SelectField icon="capsule.svg" label="长期用药" value={form.medications} options={["无", "有长期用药"]} onChange={(value) => setField(setForm, "medications", value)} />
                 <SelectField icon="heart_pulse.svg" label="妊娠/哺乳/备孕" value={form.pregnancy} options={["无", "备孕", "妊娠", "哺乳"]} onChange={(value) => setField(setForm, "pregnancy", value)} />
               </div>
             ) : null}
             {tab === "past" ? (
               <div className="qh-vc-grid">
-                <Field icon="medical_card.svg" label="既往病史" value={form.chronic} onChange={(value) => setField(setForm, "chronic", value)} />
+                <MultiSelectField
+                  icon="medical_card.svg"
+                  label="既往病史"
+                  value={form.chronic}
+                  options={CHRONIC_OPTIONS}
+                  exclusiveNone="无"
+                  wide
+                  onChange={(value) => setField(setForm, "chronic", value)}
+                />
                 <Field icon="medical_card.svg" label="手术史" value={form.surgery_history} onChange={(value) => setField(setForm, "surgery_history", value)} />
                 <Field icon="heart_pulse.svg" label="家族史" wide value={form.family_history} onChange={(value) => setField(setForm, "family_history", value)} />
               </div>
@@ -511,19 +528,194 @@ function SelectField({
   onChange: (value: string) => void;
   required?: boolean;
 }) {
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
   const known = options.includes(value) || value === "";
+  const items = !known && value ? [value, ...options] : options;
+
+  useEffect(() => {
+    if (!open) return;
+    const onDoc = (event: MouseEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
+    };
+    const onKey = (event: globalThis.KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("mousedown", onDoc);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDoc);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
   return (
-    <label className="qh-vc-field">
+    <div className="qh-vc-field" ref={rootRef}>
       <span><Ico name={icon} />{label}{required ? <em>*</em> : null}</span>
-      <div>
-        <select value={value} onChange={(event) => onChange(event.target.value)}>
-          <option value="">请选择</option>
-          {!known ? <option value={value}>{value}</option> : null}
-          {options.map((item) => <option key={item} value={item}>{item}</option>)}
-        </select>
+      <div className={`qh-vc-field-pick ${open ? "open" : ""}`}>
+        <button
+          type="button"
+          className="qh-vc-field-trigger"
+          aria-haspopup="listbox"
+          aria-expanded={open}
+          onClick={() => setOpen((prev) => !prev)}
+        >
+          <span className={value ? "" : "placeholder"}>{value || "请选择"}</span>
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <path d="m4 6 4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+        {open ? (
+          <div className="qh-vc-field-menu" role="listbox" aria-label={label}>
+            <button
+              type="button"
+              role="option"
+              aria-selected={!value}
+              className={!value ? "on" : ""}
+              onClick={() => {
+                onChange("");
+                setOpen(false);
+              }}
+            >
+              请选择
+            </button>
+            {items.map((item) => (
+              <button
+                key={item}
+                type="button"
+                role="option"
+                aria-selected={value === item}
+                className={value === item ? "on" : ""}
+                onClick={() => {
+                  onChange(item);
+                  setOpen(false);
+                }}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+        ) : null}
       </div>
-    </label>
+    </div>
   );
+}
+
+function MultiSelectField({
+  icon, label, value, options, onChange, exclusiveNone, wide
+}: {
+  icon: string;
+  label: string;
+  value: string;
+  options: string[];
+  onChange: (value: string) => void;
+  exclusiveNone?: string;
+  wide?: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const selected = parseMulti(value);
+  const extras = selected.filter((item) => !options.includes(item));
+
+  useEffect(() => {
+    if (!open) return;
+    const onDoc = (event: MouseEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
+    };
+    const onKey = (event: globalThis.KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("mousedown", onDoc);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDoc);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  function toggle(item: string) {
+    const none = exclusiveNone;
+    let next: string[];
+    if (none && item === none) {
+      next = selected.includes(none) ? [] : [none];
+    } else if (selected.includes(item)) {
+      next = selected.filter((entry) => entry !== item);
+    } else {
+      next = [...selected.filter((entry) => entry !== none), item];
+    }
+    onChange(joinMulti(next));
+  }
+
+  const summary = selected.length === 0
+    ? "请选择（可多选）"
+    : selected.join("、");
+
+  return (
+    <div className={wide ? "qh-vc-field wide" : "qh-vc-field"} ref={rootRef}>
+      <span><Ico name={icon} />{label}</span>
+      <div className={`qh-vc-field-pick multi ${open ? "open" : ""}`}>
+        <button
+          type="button"
+          className="qh-vc-field-trigger"
+          aria-haspopup="listbox"
+          aria-expanded={open}
+          onClick={() => setOpen((prev) => !prev)}
+        >
+          <span className={selected.length ? "" : "placeholder"}>{summary}</span>
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <path d="m4 6 4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+        {selected.length > 0 ? (
+          <div className="qh-vc-chip-row">
+            {selected.map((item) => (
+              <button
+                key={item}
+                type="button"
+                className="qh-vc-chip"
+                onClick={() => toggle(item)}
+                title="点击取消"
+              >
+                {item}
+                <i aria-hidden="true">×</i>
+              </button>
+            ))}
+          </div>
+        ) : null}
+        {open ? (
+          <div className="qh-vc-field-menu" role="listbox" aria-multiselectable="true" aria-label={label}>
+            {[...options, ...extras].map((item) => {
+              const on = selected.includes(item);
+              return (
+                <button
+                  key={item}
+                  type="button"
+                  role="option"
+                  aria-selected={on}
+                  className={on ? "on check" : "check"}
+                  onClick={() => toggle(item)}
+                >
+                  <i className="qh-vc-check" aria-hidden="true">{on ? "✓" : ""}</i>
+                  {item}
+                </button>
+              );
+            })}
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+function parseMulti(value: string) {
+  return value
+    .split(/[、,，;；|/]+/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function joinMulti(items: string[]) {
+  return items.join("、");
 }
 
 function Fact({ label, value }: { label: string; value: string }) {

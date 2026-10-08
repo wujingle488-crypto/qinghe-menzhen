@@ -320,10 +320,17 @@ export function ConsultPage({
     }
   }
 
-  async function saveLink(nextId: number | null) {
-    if (sessionId == null) return true;
+  async function saveLink(nextId: number | null, targetSessionId?: number | null) {
+    let id = targetSessionId ?? sessionId;
+    if (id == null) {
+      try {
+        id = await openSession();
+      } catch {
+        return false;
+      }
+    }
     try {
-      const response = await api(`/cs-api/api/consult/sessions/${sessionId}/context`, {
+      const response = await api(`/cs-api/api/consult/sessions/${id}/context`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(nextId == null ? { profileLinked: false } : { profileId: nextId })
@@ -572,12 +579,19 @@ export function ConsultPage({
     });
     try {
       let id = await ensureSession();
+      // 会话是后开的、或旧会话失效重建时，把界面上已选的就诊卡重新写进后端记忆。
+      if (profileLinked && profileId != null) {
+        await saveLink(profileId, id);
+      }
       let response = await postMessage(id, content, imageIds);
       if (!response.ok) {
         const rawError = await response.text();
         if (!rawError.includes("会话不存在")) throw new Error(humanizeError(rawError));
         forgetSession();
         id = await openSession();
+        if (profileLinked && profileId != null) {
+          await saveLink(profileId, id);
+        }
         response = await postMessage(id, content, imageIds);
       }
       await readSse(response);

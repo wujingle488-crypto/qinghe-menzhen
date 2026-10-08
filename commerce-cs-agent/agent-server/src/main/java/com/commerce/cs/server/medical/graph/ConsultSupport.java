@@ -260,8 +260,13 @@ public class ConsultSupport {
         if (compact.contains("我是谁") || compact.contains("我叫什么")) {
             return true;
         }
+        boolean linked = memory != null && memory.profileLinked && memory.profileId != null && buyerId != null;
+        // 已关联时，用户追问「能不能看我的就诊卡/档案」也按本卡回答，避免模型误说没关联。
+        if (linked && (compact.contains("就诊卡") || compact.contains("健康档案") || compact.contains("电子卡"))) {
+            return true;
+        }
         String linkedName = "";
-        if (memory != null && memory.profileLinked && memory.profileId != null && buyerId != null) {
+        if (linked) {
             linkedName = healthProfiles.displayName(buyerId, memory.profileId);
             if (!linkedName.isBlank() && compact.contains(linkedName.replace(" ", ""))
                     && (compact.contains("体重") || compact.contains("身高") || compact.contains("bmi")
@@ -365,6 +370,7 @@ public class ConsultSupport {
                 不要把话题扭成问诊采集，不要反问身体哪里不舒服，不要贴「你可以这样问我」的示例菜单。
                 若下方出现 [就诊卡] 区块，那就是本次已关联就诊卡的登记资料，优先于知识库和联网结果。
                 用户问「我」或用该卡姓名问身高、体重、BMI、年龄、过敏、用药等，必须按 [就诊卡] 回答；卡片上有的字段不得说「材料里没有」或「不知道」。
+                出现 [就诊卡] 时，禁止说「没有关联就诊卡」「本次对话没有就诊卡」或同类话；应直接按卡上内容回答或说明卡上未登记的字段。
                 先看就诊卡，再用知识库片段和联网资料；仍不够时用你自己的知识补上。
                 联网资料里若有「公开网页」或带 °C/℃ 的条目，气温必须只用那一条，同一会话里同一地点不要换数字。
                 其它网页只作背景，不要用景区、疾病科普里的数字当气温。
